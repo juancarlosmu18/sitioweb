@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Productos de Cocoa & Vainilla: tortas, galletas, postres y encargos especiales en Montería." />
+  <title>Productos | Cocoa &amp; Vainilla</title>
+
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="products.html" />
+
+  <meta property="og:site_name" content="Cocoa & Vainilla" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Productos | Cocoa & Vainilla" />
+  <meta property="og:description" content="Explorá Tortas, Galletas, Postres y Encargos especiales. Pedí por WhatsApp." />
+  <meta property="og:image" content="og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Productos | Cocoa & Vainilla" />
+  <meta name="twitter:description" content="Explorá Tortas, Galletas, Postres y Encargos especiales. Pedí por WhatsApp." />
+  <meta name="twitter:image" content="og-image.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header" data-header>
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Ir al inicio">
+        <img src="assets/logo.jpg" alt="Cocoa & Vainilla" width="28" height="28" />
+        <span class="brand-text">
+          <strong>Cocoa &amp; Vainilla</strong>
+          <span>Repostería</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+        <span class="sr-only">Abrir menú</span>
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+
+      <nav id="site-nav" class="site-nav" data-nav>
+        <a href="index.html">Inicio</a>
+        <a href="products.html" aria-current="page">Productos</a>
+        <a href="about.html">Sobre nosotros</a>
+        <a href="contact.html">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" class="page">
+    <section class="page-hero" data-animate>
+      <div class="container">
+        <h1>Productos</h1>
+        <p class="lead">Elegí por categoría y abrí cada producto para ver detalles y pedir por WhatsApp.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" data-animate>
+        <h2 class="section-title">Tortas</h2>
+        <div class="product-grid" data-product-grid data-category="Tortas" aria-label="Listado de Tortas"></div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container" data-animate>
+        <h2 class="section-title">Galletas</h2>
+        <div class="product-grid" data-product-grid data-category="Galletas" aria-label="Listado de Galletas"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" data-animate>
+        <h2 class="section-title">Postres</h2>
+        <div class="product-grid" data-product-grid data-category="Postres" aria-label="Listado de Postres"></div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container" data-animate>
+        <h2 class="section-title">Encargos especiales</h2>
+        <div class="product-grid" data-product-grid data-category="Encargos especiales" aria-label="Listado de Encargos especiales"></div>
+        <p class="muted tip">* Los encargos se cotizan según tamaño, diseño y fecha.</p>
+      </div>
+    </section>
+
+    <section class="section" data-animate>
+      <div class="container cta">
+        <div>
+          <h2>¿No encontrás lo que buscás?</h2>
+          <p>Contanos la idea y te proponemos opciones.</p>
+        </div>
+        <a class="btn btn-primary" href="#" data-whatsapp-link data-whatsapp-message="Hola, estoy interesado en sus productos de repostería.">Escribir por WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="muted">© <span data-year></span> Cocoa &amp; Vainilla</p>
+      <div class="footer-links">
+        <a href="products.html">Productos</a>
+        <a href="about.html">Sobre nosotros</a>
+        <a href="contact.html">Contacto</a>
+        <span class="footer-visits">Visitas al sitio: <strong data-visit-count>0</strong></span>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-float" href="#" data-whatsapp-link aria-label="Escribir por WhatsApp">WhatsApp</a>
+
+  <script src="script.js" defer></script>
+  <script src="admin.js" defer></script>
+</body>
+</html>

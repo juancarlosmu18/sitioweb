@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Detalle de producto de Cocoa & Vainilla. Ver descripción, precio y pedir por WhatsApp." />
+  <title>Detalle de producto | Cocoa &amp; Vainilla</title>
+
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="product.html" />
+
+  <meta property="og:site_name" content="Cocoa & Vainilla" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Detalle de producto | Cocoa & Vainilla" />
+  <meta property="og:description" content="Ver detalles y pedir por WhatsApp." />
+  <meta property="og:image" content="og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Detalle de producto | Cocoa & Vainilla" />
+  <meta name="twitter:description" content="Ver detalles y pedir por WhatsApp." />
+  <meta name="twitter:image" content="og-image.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header" data-header>
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Ir al inicio">
+        <img src="assets/logo.jpg" alt="Cocoa & Vainilla" width="28" height="28" />
+        <span class="brand-text">
+          <strong>Cocoa &amp; Vainilla</strong>
+          <span>Repostería</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+        <span class="sr-only">Abrir menú</span>
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+
+      <nav id="site-nav" class="site-nav" data-nav>
+        <a href="index.html">Inicio</a>
+        <a href="products.html">Productos</a>
+        <a href="about.html">Sobre nosotros</a>
+        <a href="contact.html">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" class="page">
+    <section class="section">
+      <div class="container" data-animate>
+        <a class="text-link" href="products.html">← Volver a Productos</a>
+
+        <div class="product-detail" data-product-detail>
+          <!-- Se completa por JS según ?id= -->
+          <div class="skeleton" aria-hidden="true">
+            <div class="skeleton-box"></div>
+            <div class="skeleton-lines">
+              <div></div><div></div><div></div>
+            </div>
+          </div>
+
+          <noscript>
+            <p>Activá JavaScript para ver el detalle del producto.</p>
+          </noscript>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="muted">© <span data-year></span> Cocoa &amp; Vainilla</p>
+      <div class="footer-links">
+        <a href="products.html">Productos</a>
+        <a href="about.html">Sobre nosotros</a>
+        <a href="contact.html">Contacto</a>
+        <span class="footer-visits">Visitas al sitio: <strong data-visit-count>0</strong></span>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-float" href="#" data-whatsapp-link aria-label="Escribir por WhatsApp">WhatsApp</a>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

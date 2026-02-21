@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Reemplazá BASE_URL por tu dominio cuando publiques (ej: https://cocoayvainilla.com) -->
+  <url>
+    <loc>BASE_URL/</loc>
+  </url>
+  <url>
+    <loc>BASE_URL/index.html</loc>
+  </url>
+  <url>
+    <loc>BASE_URL/products.html</loc>
+  </url>
+  <url>
+    <loc>BASE_URL/about.html</loc>
+  </url>
+  <url>
+    <loc>BASE_URL/contact.html</loc>
+  </url>
+  <url>
+    <loc>BASE_URL/product.html</loc>
+  </url>
+</urlset>

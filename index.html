@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Cocoa & Vainilla: repostería artesanal en Montería. Tortas, galletas, postres y encargos especiales. Pedidos por WhatsApp." />
+  <title>Cocoa &amp; Vainilla | Repostería artesanal en Montería</title>
+
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="index.html" />
+
+  <meta property="og:site_name" content="Cocoa & Vainilla" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Cocoa & Vainilla | Repostería artesanal en Montería" />
+  <meta property="og:description" content="Tortas, galletas, postres y encargos especiales. Pedí por WhatsApp." />
+  <meta property="og:image" content="og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Cocoa & Vainilla | Repostería artesanal en Montería" />
+  <meta name="twitter:description" content="Tortas, galletas, postres y encargos especiales. Pedí por WhatsApp." />
+  <meta name="twitter:image" content="og-image.png" />
+
+  <!-- Tipografías elegantes y legibles (ligeras) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header" data-header>
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Ir al inicio">
+        <img src="assets/logo.jpg" alt="Cocoa & Vainilla" width="28" height="28" />
+        <span class="brand-text">
+          <strong>Cocoa &amp; Vainilla</strong>
+          <span>Repostería</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+        <span class="sr-only">Abrir menú</span>
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+
+      <nav id="site-nav" class="site-nav" data-nav>
+        <a href="index.html" aria-current="page">Inicio</a>
+        <a href="products.html">Productos</a>
+        <a href="about.html">Sobre nosotros</a>
+        <a href="contact.html">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <!-- 1. INICIO / HERO -->
+    <section class="hero" aria-label="Presentación">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="chip">Hecho a mano • Ingredientes de calidad</p>
+          <h1>El Origen del Sabor</h1>
+          <p class="lead">
+            Tortas, galletas y postres para celebrar lo cotidiano.
+            Pedí por WhatsApp con un mensaje listo.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="products.html">Ver productos</a>
+            <a class="btn btn-ghost" href="#contacto" data-whatsapp-link data-whatsapp-message="Hola, estoy interesado en sus productos de repostería.">
+              Contactar por WhatsApp
+            </a>
+          </div>
+
+          <ul class="hero-highlights" aria-label="Beneficios">
+            <li>Pedidos por encargo</li>
+            <li>Opciones personalizadas</li>
+            <li>Entrega coordinada</li>
+          </ul>
+        </div>
+
+        <div class="hero-media" aria-hidden="true">
+          <!-- Imagen local (SVG) para no depender de recursos externos -->
+          <img class="hero-image" src="imagenes/hero-1.jpg" alt="" />
+        </div>
+      </div>
+      <div class="hero-glow" aria-hidden="true"></div>
+    </section>
+
+    <!-- 4. SOBRE NOSOTROS (resumen en inicio) -->
+    <section class="section" data-animate>
+      <div class="container two-col">
+        <div>
+          <h2>Artesanal y profesional</h2>
+          <p>
+            En <strong>Cocoa &amp; Vainilla</strong> trabajamos con recetas cuidadas, materia prima de calidad
+            y un enfoque simple: sabor real, textura perfecta y presentación impecable.
+          </p>
+          <p>
+            ¿Buscás algo especial? Tenemos opciones a medida para cumpleaños, eventos y regalos.
+          </p>
+          <a class="text-link" href="about.html">Conocé nuestra historia →</a>
+        </div>
+        <div class="card card-soft">
+          <h3 class="card-title">Lo que nos define</h3>
+          <ul class="check-list">
+            <li>Ingredientes principales de primera</li>
+            <li>Producción en tandas pequeñas</li>
+            <li>Atención cercana y rápida</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA a productos -->
+    <section class="section section-alt" data-animate>
+      <div class="container cta">
+        <div>
+          <h2>Elegí tu favorito</h2>
+          <p>Explorá categorías: Tortas, Galletas, Postres y Encargos especiales.</p>
+        </div>
+        <a class="btn btn-primary" href="products.html">Ir a Productos</a>
+      </div>
+    </section>
+
+    <!-- 5. CONTACTO (mini en inicio) -->
+    <section id="contacto" class="section" data-animate>
+      <div class="container">
+        <div class="contact-card">
+          <div>
+            <h2>Contacto</h2>
+            <p class="muted">Respondemos rápido por WhatsApp. También podés seguirnos en redes.</p>
+          </div>
+
+          <div class="contact-actions">
+            <a class="btn btn-primary" href="#" data-whatsapp-link data-whatsapp-message="Hola, estoy interesado en sus productos de repostería.">WhatsApp</a>
+            <a class="btn btn-ghost" href="contact.html">Ver opciones</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="muted">© <span data-year></span> Cocoa &amp; Vainilla • Repostería</p>
+      <div class="footer-links">
+        <a href="products.html">Productos</a>
+        <a href="about.html">Sobre nosotros</a>
+        <a href="contact.html">Contacto</a>
+        <span class="footer-visits">Visitas al sitio: <strong data-visit-count>0</strong></span>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-float" href="#" data-whatsapp-link aria-label="Escribir por WhatsApp">WhatsApp</a>
+
+  <script src="script.js" defer></script>
+  <script src="admin.js" defer></script>
+</body>
+  <!-- Panel de administración local -->
+  <div id="admin-panel" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.65); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; padding:32px; border-radius:12px; max-width:480px; width:100%; box-shadow:0 8px 32px #0002; position:relative;">
+      <button id="admin-close" style="position:absolute; top:12px; right:12px; font-size:20px; background:none; border:none; cursor:pointer;">×</button>
+      <h2>Editar productos</h2>
+      <select id="admin-product-select" style="width:100%; margin-bottom:12px;"></select>
+      <select id="admin-category" style="width:100%; margin-bottom:8px;">
+        <option value="Tortas">Tortas</option>
+        <option value="Galletas">Galletas</option>
+        <option value="Postres">Postres</option>
+        <option value="Encargos especiales">Encargos especiales</option>
+      </select>
+      <input id="admin-name" placeholder="Nombre" style="width:100%; margin-bottom:8px;" />
+      <textarea id="admin-desc" placeholder="Descripción" style="width:100%; margin-bottom:8px;"></textarea>
+      <input id="admin-price" placeholder="Precio base (COP)" type="number" style="width:100%; margin-bottom:8px;" />
+      <input id="admin-image" placeholder="URL de imagen" style="width:100%; margin-bottom:8px;" />
+      <input id="admin-image-file" type="file" accept="image/*" style="width:100%; margin-bottom:8px;" />
+      <button id="admin-save" style="width:100%; background:#c7a56b; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:bold;">Guardar cambios</button>
+      <p style="font-size:12px; color:#888; margin-top:10px;">Solo visible para ti (localStorage).</p>
+    </div>
+  </div>
+</html>

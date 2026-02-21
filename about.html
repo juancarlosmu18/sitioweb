@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Conocé Cocoa & Vainilla: repostería artesanal en Montería con enfoque en calidad, ingredientes y atención cercana." />
+  <title>Sobre nosotros | Cocoa &amp; Vainilla</title>
+
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="about.html" />
+
+  <meta property="og:site_name" content="Cocoa & Vainilla" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sobre nosotros | Cocoa & Vainilla" />
+  <meta property="og:description" content="Calidad en cada detalle: recetas cuidadas, tandas pequeñas y presentación impecable." />
+  <meta property="og:image" content="og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sobre nosotros | Cocoa & Vainilla" />
+  <meta name="twitter:description" content="Calidad en cada detalle: recetas cuidadas, tandas pequeñas y presentación impecable." />
+  <meta name="twitter:image" content="og-image.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header" data-header>
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Ir al inicio">
+        <img src="assets/logo.jpg" alt="Cocoa & Vainilla" width="28" height="28" />
+        <span class="brand-text">
+          <strong>Cocoa &amp; Vainilla</strong>
+          <span>Repostería</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+        <span class="sr-only">Abrir menú</span>
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+
+      <nav id="site-nav" class="site-nav" data-nav>
+        <a href="index.html">Inicio</a>
+        <a href="products.html">Productos</a>
+        <a href="about.html" aria-current="page">Sobre nosotros</a>
+        <a href="contact.html">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" class="page">
+    <section class="page-hero" data-animate>
+      <div class="container">
+        <h1>Sobre nosotros</h1>
+        <p class="lead">Repostería artesanal con estándares de pastelería profesional.</p>
+      </div>
+    </section>
+
+    <section class="section" data-animate>
+      <div class="container two-col">
+        <div>
+          <h2>Calidad en cada detalle</h2>
+          <p>
+            Somos una repostería artesanal enfocada en la calidad: seleccionamos ingredientes principales,
+            trabajamos en tandas pequeñas y cuidamos cada terminación.
+          </p>
+          <p>
+            Nuestra experiencia se nota en lo importante: sabor equilibrado, textura impecable y una estética
+            limpia y elegante.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Nuestro enfoque</h3>
+          <ul class="check-list">
+            <li>Recetas probadas y consistentes</li>
+            <li>Opciones personalizadas según ocasión</li>
+            <li>Comunicación clara y tiempos acordados</li>
+          </ul>
+          <a class="btn btn-primary" href="products.html">Ver productos</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" data-animate>
+      <div class="container">
+        <div class="cta">
+          <div>
+            <h2>¿Tenés una idea?</h2>
+            <p>Describinos el evento, fecha y porciones, y te asesoramos.</p>
+          </div>
+          <a class="btn btn-primary" href="#" data-whatsapp-link data-whatsapp-message="Hola, estoy interesado en sus productos de repostería.">Consultar por WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="muted">© <span data-year></span> Cocoa &amp; Vainilla</p>
+      <div class="footer-links">
+        <a href="products.html">Productos</a>
+        <a href="about.html">Sobre nosotros</a>
+        <a href="contact.html">Contacto</a>
+        <span class="footer-visits">Visitas al sitio: <strong data-visit-count>0</strong></span>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-float" href="#" data-whatsapp-link aria-label="Escribir por WhatsApp">WhatsApp</a>
+
+  <script src="script.js" defer></script>
+  <script src="admin.js" defer></script>
+</body>
+</html>
