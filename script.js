@@ -64,7 +64,7 @@ let products = [
       { label: "1/2 lb", price: 45000 },
       { label: "1 lb", price: 65000 },
     ],
-    image: "imagenes/tortas-1.jpg",
+    image: "tortas-1.jpg",
   },
   {
     id: "torta-limon",
@@ -81,7 +81,7 @@ let products = [
       { label: "1/2 lb", price: 45000 },
       { label: "1 lb", price: 65000 },
     ],
-    image: "imagenes/tortas-2.jpg",
+    image: "tortas-2.jpg",
   },
       {
         id: "torta-yogurt",
@@ -98,7 +98,7 @@ let products = [
           { label: "1/2 lb", price: 45000 },
           { label: "1 lb", price: 65000 },
         ],
-        image: "imagenes/tortas-3.jpg",
+        image: "tortas-3.jpg",
       },
       {
         id: "torta-leche-fresas",
@@ -115,7 +115,7 @@ let products = [
           { label: "1/2 lb", price: 45000 },
           { label: "1 lb", price: 65000 },
         ],
-        image: "imagenes/tortas-4.jpg",
+        image: "tortas-4.jpg",
       },
       {
         id: "torta-fria",
@@ -132,7 +132,7 @@ let products = [
           { label: "1/2 lb", price: 45000 },
           { label: "1 lb", price: 65000 },
         ],
-        image: "imagenes/tortas-frias-1.jpg",
+        image: "tortas-frias-1.jpg",
       },
       {
         id: "galletas-manteca",
@@ -143,7 +143,7 @@ let products = [
           "Galletas de manteca con textura crocante y sabor casero. Perfectas para el café o para regalar.",
         ingredients: ["Manteca", "Harina", "Azúcar", "Vainilla"],
         price: 6500,
-        image: "imagenes/galletas-1.jpg",
+        image: "galletas-1.jpg",
       },
 
       {
@@ -155,7 +155,7 @@ let products = [
           "Galletas con chips de chocolate, doradas por fuera y tiernas por dentro. Un favorito absoluto.",
         ingredients: ["Harina", "Manteca", "Azúcar", "Chips de chocolate"],
         price: 7000,
-        image: "imagenes/galletas-2.jpg"
+        image: "galletas-2.jpg"
       }
 ];
 
