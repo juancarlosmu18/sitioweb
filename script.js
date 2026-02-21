@@ -274,9 +274,47 @@ function escapeHtml(input) {
     .replaceAll("'", "&#039;");
 }
 
+
+// Menú móvil: abre/cierra el menú en móviles
+function initMobileNav() {
+  const header = document.querySelector('[data-header]');
+  const nav = document.querySelector('[data-nav]');
+  const toggle = document.querySelector('[data-nav-toggle]');
+  if (!header || !nav || !toggle) return;
+
+  function closeMenu() {
+    header.classList.remove('nav-open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+
+  function openMenu() {
+    header.classList.add('nav-open');
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+
+  toggle.addEventListener('click', () => {
+    if (header.classList.contains('nav-open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  // Cierra el menú al hacer clic en un enlace de navegación
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      closeMenu();
+    });
+  });
+
+  // Cierra el menú al hacer scroll o cambiar de tamaño
+  window.addEventListener('scroll', closeMenu);
+  window.addEventListener('resize', closeMenu);
+}
+
 function main() {
   //initYear();
-  //initMobileNav();
+  initMobileNav();
   initWhatsAppLinks();
   //initVisitCounter();
   initProductGrids();
