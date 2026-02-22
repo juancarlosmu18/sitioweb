@@ -121,6 +121,22 @@
   <a class="wa-float" href="#" data-whatsapp-link aria-label="Escribir por WhatsApp">WhatsApp</a>
 
   <script src="script.js" defer></script>
+</body>
+  <!-- Panel de administración local -->
+  <div id="admin-panel" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.65); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; padding:32px; border-radius:12px; max-width:480px; width:100%; box-shadow:0 8px 32px #0002; position:relative;">
+      <button id="admin-close" style="position:absolute; top:12px; right:12px; font-size:20px; background:none; border:none; cursor:pointer;">×</button>
+      <h2>Editar productos</h2>
+      <select id="admin-product-select" style="width:100%; margin-bottom:12px;"></select>
+      <input id="admin-name" placeholder="Nombre" style="width:100%; margin-bottom:8px;" />
+      <textarea id="admin-desc" placeholder="Descripción" style="width:100%; margin-bottom:8px;"></textarea>
+      <input id="admin-price" placeholder="Precio base (COP)" type="number" style="width:100%; margin-bottom:8px;" />
+      <input id="admin-image" placeholder="URL de imagen" style="width:100%; margin-bottom:8px;" />
+      <button id="admin-save" style="width:100%; background:#c7a56b; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:bold;">Guardar cambios</button>
+      <p style="font-size:12px; color:#888; margin-top:10px;">Solo visible para ti (localStorage).</p>
+    </div>
+  </div>
+</html>
   <script src="admin.js" defer></script>
 </body>
 </html>
