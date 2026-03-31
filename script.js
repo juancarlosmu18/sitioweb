@@ -1,3 +1,19 @@
+// Contador de visitas global usando countapi.xyz
+function initVisitCounter() {
+  const el = document.querySelector('[data-visit-count]');
+  if (!el) return;
+  // Cambia la key por algo único de tu sitio
+  const namespace = 'cocoayvainilla';
+  const key = 'visitas';
+  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+    .then(r => r.json())
+    .then(data => {
+      el.textContent = data.value;
+    })
+    .catch(() => {
+      el.textContent = 'N/A';
+    });
+}
 // Inicializa los enlaces de WhatsApp en la página de contacto y otros lugares
 function initWhatsAppLinks() {
   const links = document.querySelectorAll('[data-whatsapp-link]');
