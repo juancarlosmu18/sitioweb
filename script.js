@@ -5,7 +5,7 @@ function initVisitCounter() {
   // Cambia la key por algo único de tu sitio
   const namespace = 'cocoayvainilla';
   const key = 'visitas';
- // fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
     .then(r => r.json())
     .then(data => {
       el.textContent = data.value;
