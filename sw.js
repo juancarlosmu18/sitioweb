@@ -1,4 +1,7 @@
-const CACHE_NAME = 'cv-pwa-v1';
+// sw.js - Service Worker simplificado y actualizado
+
+const CACHE_NAME = 'cv-pwa-v2';  // Cambiamos la versión para forzar actualización
+
 const ASSETS = [
   '/',
   '/index.html',
@@ -8,41 +11,56 @@ const ASSETS = [
   '/styles.css',
   '/script.js',
   '/admin.js',
+  '/products-module.js',
   '/manifest.json',
-  '/assets/icon-192.png',
-  '/assets/icon-512.png'
+  '/favicon.ico',
+  '/favicon-32x32.png',
+  '/apple-touch-icon.png'
 ];
 
-// Instalación: precache de recursos esenciales
+// Instalación: cachear solo archivos esenciales
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('Service Worker: Cacheando archivos esenciales...');
+      return cache.addAll(ASSETS);
+    })
   );
 });
 
-// Activación: limpieza de cachés antiguos
+// Activación: borrar cachés antiguos
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      );
+    })
   );
 });
 
-// Estrategia Offline-First: responde con caché y actualiza en segundo plano
+// Fetch: estrategia Cache First, luego Network
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      const fetchPromise = fetch(event.request)
-        .then(networkResp => {
-          if (networkResp.ok) {
-            caches.open(CACHE_NAME).then(cache => cache.put(event.request, networkResp.clone()));
-          }
-          return networkResp;
-        })
-        .catch(() => cached);
-      return cached || fetchPromise;
+    caches.match(event.request).then(cachedResponse => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(event.request).then(networkResponse => {
+        // Guardar en caché las respuestas exitosas
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return networkResponse;
+      }).catch(() => {
+        // Si no hay internet, devolver caché si existe
+        return caches.match(event.request);
+      });
     })
   );
 });
