@@ -1,18 +1,43 @@
-// Contador de visitas global usando countapi.xyz
+// Registro del Service Worker para PWA (solo en HTTPS)
+if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('Service Worker registrado', reg.scope))
+      .catch(err => console.error('Error registrando SW', err));
+  });
+}
+// ==================== CONTADOR DE VISITAS ====================
+// Comentado temporalmente porque la API da error (nombre incorrecto)
 function initVisitCounter() {
   const el = document.querySelector('[data-visit-count]');
   if (!el) return;
-  // Cambia la key por algo único de tu sitio
-  const namespace = 'cocoayvainilla';
-  const key = 'visitas';
-  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-    .then(r => r.json())
-    .then(data => {
-      el.textContent = data.value;
-    })
-    .catch(() => {
-      el.textContent = 'N/A';
+  
+  // Mostramos un valor por defecto mientras arreglamos
+  el.textContent = "—";
+  console.log("Contador de visitas desactivado temporalmente");
+}
+
+// Si quieres dejarla pero corregida, usa esta versión:
+async function initVisitCounter() {
+  const el = document.querySelector('[data-visit-count]');
+  if (!el) return;
+  
+  try {
+    const resp = await fetch('https://api.countapi.xyz/hit/cocoayvainilla/visitas', {
+      method: 'GET',
+      signal: AbortSignal.timeout(4000)
     });
+    
+    if (resp.ok) {
+      const data = await resp.json();
+      el.textContent = data.value || "0";
+    } else {
+      el.textContent = "—";
+    }
+  } catch (err) {
+    el.textContent = "—";
+    console.log("Contador de visitas no disponible");
+  }
 }
 // Inicializa los enlaces de WhatsApp en la página de contacto y otros lugares
 function initWhatsAppLinks() {
@@ -63,198 +88,6 @@ function formatPriceARS(price) {
 */
 
 const WHATSAPP_NUMBER = "573222391967"; // Número real en formato wa.me: código país + número, sin + ni espacios.
-
-let products = [
-  {
-    id: "torta-rosa",
-    category: "Tortas",
-    name: "Torta de Vainilla",
-    shortDescription: "Clásica, suave y perfecta para compartir.",
-    description:
-      "Torta artesanal de vainilla con miga suave y sabor casero. Ideal para cumpleaños y celebraciones.",
-    ingredients: ["Harina", "Vainilla", "Mantequilla", "Huevos", "Leche"],
-    price: null,
-    priceFrom: 25000,
-    priceOptions: [
-      { label: "1/4 lb", price: 25000 },
-      { label: "1/2 lb", price: 45000 },
-      { label: "1 lb", price: 65000 },
-    ],
-    image: "tortas-1.jpg",
-  },
-  {
-    id: "torta-limon",
-    category: "Tortas",
-    name: "Torta de Chocolate",
-    shortDescription: "Intensa, húmeda y con cacao real.",
-    description:
-      "Torta artesanal de chocolate con sabor profundo a cacao. Un clásico que siempre queda bien.",
-    ingredients: ["Harina", "Cacao", "Chocolate", "Mantequilla", "Huevos", "Leche"],
-    price: null,
-    priceFrom: 25000,
-    priceOptions: [
-      { label: "1/4 lb", price: 25000 },
-      { label: "1/2 lb", price: 45000 },
-      { label: "1 lb", price: 65000 },
-    ],
-    image: "tortas-2.jpg",
-  },
-      {
-        id: "torta-yogurt",
-        category: "Tortas",
-        name: "Torta Yogurt",
-        shortDescription: "Suave, fresca y muy esponjosa.",
-        description:
-          "Torta artesanal de yogurt: ligera, húmeda y con un sabor delicado. Ideal para quienes prefieren opciones más frescas.",
-        ingredients: ["Harina", "Yogurt", "Mantequilla", "Huevos", "Leche"],
-        price: null,
-        priceFrom: 25000,
-        priceOptions: [
-          { label: "1/4 lb", price: 25000 },
-          { label: "1/2 lb", price: 45000 },
-          { label: "1 lb", price: 65000 },
-        ],
-        image: "tortas-3.jpg",
-      },
-      {
-        id: "torta-leche-fresas",
-        category: "Tortas",
-        name: "Torta de Leche (dulce y fresas)",
-        shortDescription: "Relleno de dulce de leche y fresas.",
-        description:
-          "Torta artesanal de leche con relleno de dulce de leche y fresas. Equilibrada, cremosa y perfecta para celebraciones.",
-        ingredients: ["Harina", "Leche", "Mantequilla", "Huevos", "Dulce de leche", "Fresas"],
-        price: null,
-        priceFrom: 25000,
-        priceOptions: [
-          { label: "1/4 lb", price: 25000 },
-          { label: "1/2 lb", price: 45000 },
-          { label: "1 lb", price: 65000 },
-        ],
-        image: "tortas-4.jpg",
-      },
-      {
-        id: "torta-fria",
-        category: "Tortas",
-        name: "Torta fría",
-        shortDescription: "Suave, cremosa y perfecta para servir fría.",
-        description:
-          "Torta fría artesanal, ideal para celebraciones y reuniones. Textura suave y un sabor delicioso para compartir.",
-        ingredients: ["Leche", "Crema", "Biscocho", "Arequipe"],
-        price: null,
-        priceFrom: 25000,
-        priceOptions: [
-          { label: "1/4 lb", price: 25000 },
-          { label: "1/2 lb", price: 45000 },
-          { label: "1 lb", price: 65000 },
-        ],
-        image: "tortas-frias-1.jpg",
-      },
-      {
-        id: "galletas-manteca",
-        category: "Galletas",
-        name: "Galletas de Manteca",
-        shortDescription: "Clásicas, crocantes y delicadas.",
-        description:
-          "Galletas de manteca con textura crocante y sabor casero. Perfectas para el café o para regalar.",
-        ingredients: ["Manteca", "Harina", "Azúcar", "Vainilla"],
-        price: 6500,
-        image: "galletas-1.jpg",
-      },
-
-      {
-        id: "galletas-choco",
-        category: "Galletas",
-        name: "Galletas con Chips",
-        shortDescription: "Chocolate real, en cada mordida.",
-        description:
-          "Galletas con chips de chocolate, doradas por fuera y tiernas por dentro. Un favorito absoluto.",
-        ingredients: ["Harina", "Manteca", "Azúcar", "Chips de chocolate"],
-        price: 7000,
-        image: "galletas-2.jpg"
-      }
-];
-
-
-function initProductGrids() {
-  const grids = document.querySelectorAll("[data-product-grid]");
-  if (!grids.length) return;
-
-  grids.forEach((grid) => {
-    const category = grid.getAttribute("data-category");
-    const list = products.filter((p) => p.category === category);
-
-    grid.innerHTML = list.map(renderProductCard).join("");
-  });
-}
-
-function initProductDetail() {
-  const host = document.querySelector("[data-product-detail]");
-  if (!host) return;
-
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-
-  const product = products.find((p) => p.id === id);
-  if (!product) {
-    host.innerHTML = `
-      <div class="card">
-        <h1 class="card-title">Producto no encontrado</h1>
-        <p class="muted">Volvé a la lista para elegir otro producto.</p>
-        <a class="btn btn-primary" href="products.html">Ver productos</a>
-      </div>
-    `;
-    return;
-  }
-
-  document.title = `${product.name} • Cocoa & Vainilla`;
-
-  const message = `Hola, estoy interesado en sus productos de repostería. Producto: ${product.name}. ¿Me pasás disponibilidad y formas de entrega?`;
-
-  const basePrice = getProductBasePrice(product);
-  const hasOptions = Array.isArray(product.priceOptions) && product.priceOptions.length;
-
-  const priceLine = hasOptions
-    ? `<p class="muted"><strong>Precio:</strong> Desde ${escapeHtml(formatPriceARS(basePrice))}</p>`
-    : `<p class="muted"><strong>Precio:</strong> ${escapeHtml(formatPriceARS(basePrice))}</p>`;
-
-  const priceOptionsBlock = hasOptions
-    ? `
-      <div class="ingredients" style="margin-top: 14px;">
-        <h3>Tamaños y precios</h3>
-        <ul>
-          ${product.priceOptions
-            .map((opt) => `<li><strong>${escapeHtml(opt.label)}:</strong> ${escapeHtml(formatPriceARS(opt.price))}</li>`)
-            .join("")}
-        </ul>
-      </div>
-    `
-    : "";
-
-  host.innerHTML = `
-    <div class="product-detail-media">
-      <img src="${product.image}" alt="${escapeHtml(product.name)}" />
-    </div>
-
-    <div class="product-detail-copy">
-      <h1>${escapeHtml(product.name)}</h1>
-      <p class="muted"><strong>Categoría:</strong> ${escapeHtml(product.category)}</p>
-      ${priceLine}
-      <p>${escapeHtml(product.description)}</p>
-
-      <div class="ingredients">
-        <h3>Ingredientes principales</h3>
-        <ul>
-          ${product.ingredients.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}
-        </ul>
-      </div>
-
-      ${priceOptionsBlock}
-
-      <a class="btn btn-primary" href="${buildWhatsAppLink(message)}">Pedir por WhatsApp</a>
-    </div>
-  `;
-}
 
 function initFadeIn() {
   const items = document.querySelectorAll("[data-animate]");
@@ -333,28 +166,46 @@ function main() {
   //initYear();
   initMobileNav();
   initWhatsAppLinks();
-  initVisitCounter();
-  initProductGrids();
-  initProductDetail();
+ // initVisitCounter();
+ // initProductGrids();
+ // initProductDetail();
   initFadeIn();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   main();
-  // --- Panel de administración local ---
-    loadAdminFromStorage();
-  const closeBtn = document.getElementById("admin-close");
-  if (closeBtn) closeBtn.onclick = hideAdminPanel;
-  const saveBtn = document.getElementById("admin-save");
-  if (saveBtn) saveBtn.onclick = saveAdminProduct;
+  // Panel de administración local SOLO debe inicializarse desde admin.js
 });
 
-// Atajo global SIEMPRE activo
+// ====================== ATAJO GLOBAL ADMIN ======================
+// Funciona en TODAS las páginas: index, products, about, contact, etc.
+
 window.addEventListener("keydown", (e) => {
   if (e.ctrlKey && e.altKey && (e.key === "a" || e.key === "A")) {
     e.preventDefault();
-    showAdminPanel();
+
+    // Intenta abrir el panel de forma segura
+    if (typeof window.showAdminPanel === "function") {
+      window.showAdminPanel();
+    } 
+    else {
+      // Fallback: si admin.js no cargó la función, abrimos el panel manualmente
+      const panel = document.getElementById("admin-panel");
+      if (panel) {
+        panel.style.display = "flex";
+        console.log("Panel abierto manualmente (fallback)");
+        
+        // Intentamos cargar admin.js dinámicamente si es necesario
+        if (!document.querySelector('script[src="admin.js"]')) {
+          const script = document.createElement("script");
+          script.src = "admin.js";
+          script.type = "module";   // importante porque admin.js usa import
+          document.body.appendChild(script);
+        }
+      } else {
+        alert("No se encontró el panel de administración en esta página.");
+      }
+    }
   }
 });
-
 

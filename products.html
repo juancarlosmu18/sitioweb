@@ -11,14 +11,14 @@
 
   <meta property="og:site_name" content="Cocoa & Vainilla" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Productos | Cocoa & Vainilla" />
+  <meta property="og:title" content="Productos | Cocoa &amp; Vainilla" />
   <meta property="og:description" content="Explorá Tortas, Galletas, Postres y Encargos especiales. Pedí por WhatsApp." />
   <meta property="og:image" content="og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Productos | Cocoa & Vainilla" />
+  <meta name="twitter:title" content="Productos | Cocoa &amp; Vainilla" />
   <meta name="twitter:description" content="Explorá Tortas, Galletas, Postres y Encargos especiales. Pedí por WhatsApp." />
   <meta name="twitter:image" content="og-image.png" />
 
@@ -59,53 +59,27 @@
     </div>
   </header>
 
-  <main id="contenido" class="page">
-    <section class="page-hero" data-animate>
-      <div class="container">
-        <h1>Productos</h1>
-        <p class="lead">Elegí por categoría y abrí cada producto para ver detalles y pedir por WhatsApp.</p>
-      </div>
-    </section>
+<main id="contenido" class="page">
+  <section class="page-hero" data-animate>
+    <div class="container">
+      <h1>Productos</h1>
+      <p class="lead">Elegí por categoría y abrí cada producto para ver detalles y pedir por WhatsApp.</p>
+    </div>
+  </section>
 
-    <section class="section">
-      <div class="container" data-animate>
-        <h2 class="section-title">Tortas</h2>
-        <div class="product-grid" data-product-grid data-category="Tortas" aria-label="Listado de Tortas"></div>
-      </div>
-    </section>
+  <!-- CONTENEDOR DINÁMICO -->
+  <div id="dynamic-categories"></div>
 
-    <section class="section section-alt">
-      <div class="container" data-animate>
-        <h2 class="section-title">Galletas</h2>
-        <div class="product-grid" data-product-grid data-category="Galletas" aria-label="Listado de Galletas"></div>
+  <section class="section" data-animate>
+    <div class="container cta">
+      <div>
+        <h2>¿No encontrás lo que buscás?</h2>
+        <p>Contanos la idea y te proponemos opciones.</p>
       </div>
-    </section>
-
-    <section class="section">
-      <div class="container" data-animate>
-        <h2 class="section-title">Postres</h2>
-        <div class="product-grid" data-product-grid data-category="Postres" aria-label="Listado de Postres"></div>
-      </div>
-    </section>
-
-    <section class="section section-alt">
-      <div class="container" data-animate>
-        <h2 class="section-title">Encargos especiales</h2>
-        <div class="product-grid" data-product-grid data-category="Encargos especiales" aria-label="Listado de Encargos especiales"></div>
-        <p class="muted tip">* Los encargos se cotizan según tamaño, diseño y fecha.</p>
-      </div>
-    </section>
-
-    <section class="section" data-animate>
-      <div class="container cta">
-        <div>
-          <h2>¿No encontrás lo que buscás?</h2>
-          <p>Contanos la idea y te proponemos opciones.</p>
-        </div>
-        <a class="btn btn-primary" href="#" data-whatsapp-link data-whatsapp-message="Hola, estoy interesado en sus productos de repostería.">Escribir por WhatsApp</a>
-      </div>
-    </section>
-  </main>
+      <a class="btn btn-primary" href="#" data-whatsapp-link data-whatsapp-message="Hola, estoy interesado en sus productos de repostería.">Escribir por WhatsApp</a>
+    </div>
+  </section>
+</main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
@@ -119,25 +93,48 @@
     </div>
   </footer>
 
-
   <a class="wa-float" href="#" data-whatsapp-link aria-label="Escribir por WhatsApp">WhatsApp</a>
 
-  <!-- Panel de administración local -->
-  <div id="admin-panel" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.65); z-index:9999; align-items:center; justify-content:center;">
-    <div style="background:#fff; padding:32px; border-radius:12px; max-width:480px; width:100%; box-shadow:0 8px 32px #0002; position:relative;">
-      <button id="admin-close" style="position:absolute; top:12px; right:12px; font-size:20px; background:none; border:none; cursor:pointer;">×</button>
-      <h2>Editar productos</h2>
-      <select id="admin-product-select" style="width:100%; margin-bottom:12px;"></select>
-      <input id="admin-name" placeholder="Nombre" style="width:100%; margin-bottom:8px;" />
-      <textarea id="admin-desc" placeholder="Descripción" style="width:100%; margin-bottom:8px;"></textarea>
-      <input id="admin-price" placeholder="Precio base (COP)" type="number" style="width:100%; margin-bottom:8px;" />
-      <input id="admin-image" placeholder="URL de imagen" style="width:100%; margin-bottom:8px;" />
-      <button id="admin-save" style="width:100%; background:#c7a56b; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:bold;">Guardar cambios</button>
-      <p style="font-size:12px; color:#888; margin-top:10px;">Solo visible para ti (localStorage).</p>
+  <!-- Panel de administración local (versión mejorada con botón Eliminar) -->
+<div id="admin-panel" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.65); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:#fff; padding:32px; border-radius:12px; max-width:520px; width:100%; box-shadow:0 8px 32px #0002; position:relative;">
+    <button id="admin-close" style="position:absolute; top:12px; right:12px; font-size:24px; background:none; border:none; cursor:pointer; color:#666;">×</button>
+    
+    <h2>Editar productos</h2>
+    
+    <select id="admin-product-select" style="width:100%; margin-bottom:16px; padding:10px;"></select>
+    
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <select id="admin-category" style="flex:1; padding:10px;"></select>
+      <input id="admin-new-category" placeholder="Nueva categoría" style="flex:1; padding:10px;" />
+      <button id="admin-add-category" style="padding:0 14px;">+</button>
     </div>
+
+    <input id="admin-name" placeholder="Nombre del producto" style="width:100%; margin-bottom:10px; padding:10px;" />
+    <textarea id="admin-desc" placeholder="Descripción completa" style="width:100%; height:80px; margin-bottom:10px; padding:10px;"></textarea>
+    <input id="admin-price" placeholder="Precio base (COP)" type="number" style="width:100%; margin-bottom:10px; padding:10px;" />
+    <input id="admin-image" placeholder="URL de imagen (opcional)" style="width:100%; margin-bottom:10px; padding:10px;" />
+    
+    <input id="admin-image-file" type="file" accept="image/*" style="width:100%; margin-bottom:12px;" />
+    <img id="admin-image-preview" style="display:none; max-width:100%; margin-bottom:12px; border-radius:8px;" alt="Vista previa" />
+
+    <div style="display:flex; gap:12px; margin-top:20px;">
+      <button id="admin-save" style="flex:1; background:#c7a56b; color:white; border:none; padding:14px; border-radius:8px; font-weight:bold; font-size:16px;">
+        Guardar cambios
+      </button>
+      <button id="admin-delete" style="flex:1; background:#e74c3c; color:white; border:none; padding:14px; border-radius:8px; font-weight:bold; font-size:16px; display:none;">
+        Eliminar producto
+      </button>
+    </div>
+
+    <p style="font-size:13px; color:#888; margin-top:16px; text-align:center;">
+      Solo visible para ti (IndexedDB local)
+    </p>
   </div>
+</div>
 
   <script src="script.js" defer></script>
-  <script src="admin.js" defer></script>
+  <script type="module" src="products-module.js"></script>
+  <script type="module" src="admin.js"></script>
 </body>
 </html>

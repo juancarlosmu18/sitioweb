@@ -1,0 +1,21 @@
+{
+  "name": "Cocoa & Vainilla Catálogo",
+  "short_name": "C&V Catálogo",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff8ed",
+  "theme_color": "#c7a56b",
+  "description": "Catálogo offline de repostería artesanal.",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
