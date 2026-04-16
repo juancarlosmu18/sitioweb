@@ -34,8 +34,32 @@ function renderDynamic(products) {
 
   container.innerHTML = '';
 
-  const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+  // Obtener categorías únicas
+  let categories = [...new Set(products.map(p => p.category).filter(Boolean))];
 
+  // === ORDEN PERSONALIZADO ===
+  const priorityOrder = [
+    "Tortas",
+    "Tortas frías",
+    "Galletas",
+    "Postres",
+    "Encargos especiales"
+  ];
+
+  // Ordenar: primero las prioritarias, luego el resto alfabéticamente
+  categories.sort((a, b) => {
+    const indexA = priorityOrder.indexOf(a);
+    const indexB = priorityOrder.indexOf(b);
+
+    if (indexA !== -1 && indexB !== -1) return indexA - indexB;     // ambas prioritarias
+    if (indexA !== -1) return -1;                                   // a es prioritaria → primero
+    if (indexB !== -1) return 1;                                    // b es prioritaria → primero
+    return a.localeCompare(b);                                      // resto en orden alfabético
+  });
+
+  console.log("Categorías ordenadas:", categories);
+
+  // Renderizar cada categoría
   categories.forEach(cat => {
     const filtered = products.filter(p => p.category === cat);
 
@@ -72,7 +96,7 @@ function renderDynamic(products) {
     container.innerHTML += sectionHTML + cardsHTML + closingHTML;
   });
 
-  console.log(`✅ Renderizadas ${categories.length} categorías`);
+  console.log(`✅ Se renderizaron ${categories.length} categorías en orden correcto`);
 }
 
 // Iniciar
