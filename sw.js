@@ -18,8 +18,9 @@ const ASSETS = [
   '/apple-touch-icon.png'
 ];
 
-// Instalación: cachear solo archivos esenciales
+// Instalación: cachear solo archivos esenciales y forzar actualización
 self.addEventListener('install', event => {
+  self.skipWaiting(); // <--- ESTO FUERZA A QUE NO ESPERE
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       console.log('Service Worker: Cacheando archivos esenciales...');
@@ -28,8 +29,9 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activación: borrar cachés antiguos
+// Activación: borrar cachés antiguos y tomar el control
 self.addEventListener('activate', event => {
+  event.waitUntil(clients.claim()); // <--- TOMA EL CONTROL INMEDIATO DE LA PÁGINA
   event.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(
