@@ -2,7 +2,7 @@
 
 import { getAllProducts, addOrUpdateProduct } from './db.js';
 
-async function init() {
+async function init() {.
   console.log("🚀 Iniciando renderizado de productos...");
 
   let products = await getAllProducts();
@@ -47,7 +47,29 @@ function renderProductsSimple(products) {
     grouped[p.category].push(p);
   });
 
-  Object.keys(grouped).forEach(category => {
+  // 1. Definir tu orden personalizado
+  const ordenDeseado = [
+    'Tortas', 
+    'Tortas frías', 
+    'Postres', 
+    'Encargos especiales', 
+    'Galletas'
+  ];
+
+  // 2. Extraer las categorías que existen y ordenarlas
+  const categoriasOrdenadas = Object.keys(grouped).sort((a, b) => {
+    let posicionA = ordenDeseado.indexOf(a);
+    let posicionB = ordenDeseado.indexOf(b);
+    
+    // Si creas una categoría nueva que no está en la lista, se va al final (posición 999)
+    if (posicionA === -1) posicionA = 999;
+    if (posicionB === -1) posicionB = 999;
+    
+    return posicionA - posicionB;
+  });
+
+  // 3. Renderizar en pantalla siguiendo el nuevo orden
+  categoriasOrdenadas.forEach(category => {
     const prods = grouped[category];
 
     const html = `
