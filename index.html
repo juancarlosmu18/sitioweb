@@ -127,7 +127,13 @@
         <a class="btn btn-primary" href="products.html">Ir a Productos</a>
       </div>
     </section>
-
+<section class="section section-alt" id="ofertas-feed">
+  <div class="container">
+    <h2 style="text-align: center; margin-bottom: 30px;">Próximos Eventos y Ofertas</h2>
+    <div id="offers-container" class="offers-grid">
+      </div>
+  </div>
+</section>
     <!-- 5. CONTACTO (mini en inicio) -->
     <section id="contacto" class="section" data-animate>
       <div class="container">
@@ -193,6 +199,20 @@
     </div>
 
     <p style="font-size:13px; color:#888; margin-top:16px; text-align:center;">
+      <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+<h3>Gestionar Ofertas (Feed)</h3>
+<select id="admin-offer-select" style="width:100%; margin-bottom:12px; padding:10px;"></select>
+<input id="admin-offer-title" placeholder="Título de la oferta (ej: 2x1 Martes)" style="width:100%; margin-bottom:10px; padding:10px;" />
+<textarea id="admin-offer-desc" placeholder="Descripción de la oferta..." style="width:100%; height:60px; margin-bottom:10px; padding:10px;"></textarea>
+
+<div style="display:flex; gap:12px;">
+  <button id="admin-offer-save" style="flex:1; background:#4CAF50; color:white; border:none; padding:10px; border-radius:6px; font-weight:bold;">
+    Guardar Oferta
+  </button>
+  <button id="admin-offer-delete" style="flex:1; background:#e74c3c; color:white; border:none; padding:10px; border-radius:6px; font-weight:bold; display:none;">
+    Eliminar Oferta
+  </button>
+</div>
       Solo visible para ti (IndexedDB local)
     </p>
   </div>

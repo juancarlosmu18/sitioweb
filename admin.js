@@ -1,12 +1,14 @@
-// admin.js - Versión FINAL corregida (respeta "Tortas frías")
+// admin.js - VERSIÓN CORREGIDA Y ROBUSTA (Botón Guardar debe funcionar)
 
 import { getAllProducts, addOrUpdateProduct, deleteProduct } from './db.js';
 import { getAllCategories, addCategory } from './categories-db.js';
+import { getAllOffers, saveOffer, deleteOffer } from './offers-db.js';
 
 let products = [];
 let categories = [];
+let offers = [];
 
-// ==================== GLOBALES ====================
+// ==================== MOSTRAR / OCULTAR PANEL ====================
 window.showAdminPanel = async function() {
   const panel = document.getElementById("admin-panel");
   if (!panel) return;
@@ -14,6 +16,7 @@ window.showAdminPanel = async function() {
 
   await loadAdminFromStorage();
   await refreshCategories();
+  await loadAdminOffers();
   loadAdminProducts();
 };
 
@@ -24,7 +27,7 @@ window.hideAdminPanel = function() {
 
 // ==================== CATEGORÍAS ====================
 async function refreshCategories() {
-  categories = await getAllCategories();
+  categories = await getAllCategories().catch(() => []);
   renderCategoryOptions();
 }
 
@@ -67,106 +70,162 @@ function loadAdminProducts() {
   select.appendChild(optNew);
 
   select.onchange = () => fillAdminFields(select.value);
-  fillAdminFields(select.value || "0");
+  fillAdminFields("0");
 }
 
 function fillAdminFields(idx) {
   const deleteBtn = document.getElementById("admin-delete");
-  const catSel = document.getElementById("admin-category");
+  if (deleteBtn) deleteBtn.style.display = (idx === "new") ? "none" : "block";
 
-  if (idx === "new") {
-    if (deleteBtn) deleteBtn.style.display = "none";
-    document.getElementById("admin-name").value = "";
-    document.getElementById("admin-desc").value = "";
-    document.getElementById("admin-price").value = "";
-    document.getElementById("admin-image").value = "";
-    document.getElementById("admin-image-file").value = "";
-    updateAdminImagePreview("");
-    return;
-  }
+  const p = (idx === "new") ? null : products[idx];
 
-  if (deleteBtn) deleteBtn.style.display = "block";
-  const p = products[idx];
-  if (!p) return;
+  document.getElementById("admin-name").value = p ? (p.name || "") : "";
+  document.getElementById("admin-desc").value = p ? (p.description || p.shortDescription || "") : "";
+  document.getElementById("admin-price").value = p ? (p.priceFrom || p.price || "") : "";
+  document.getElementById("admin-image").value = p ? (p.image || "") : "";
 
-  // Importante: Respetamos exactamente la categoría guardada
-  if (catSel && p.category) catSel.value = p.category;
+  const catSelect = document.getElementById("admin-category");
+  if (catSelect && p && p.category) catSelect.value = p.category;
 
-  document.getElementById("admin-name").value = p.name || "";
-  document.getElementById("admin-desc").value = p.description || "";
-  document.getElementById("admin-price").value = p.priceFrom || p.price || "";
-  document.getElementById("admin-image").value = p.image || "";
-  updateAdminImagePreview(p.image || "");
+  updateAdminImagePreview(p ? p.image : "");
 }
 
-// ==================== GUARDAR ====================
 async function saveAdminProduct() {
+  console.log("🔵 Botón Guardar presionado - intentando guardar..."); // Para depurar
+
   const idx = document.getElementById("admin-product-select").value;
-  const category = document.getElementById("admin-category").value.trim();   // ← Categoría exacta seleccionada
+  const category = document.getElementById("admin-category").value.trim();
   const name = document.getElementById("admin-name").value.trim();
   const desc = document.getElementById("admin-desc").value.trim();
   const price = Number(document.getElementById("admin-price").value) || null;
 
-  let image = document.getElementById("admin-image").value;
+  let image = document.getElementById("admin-image").value.trim();
   const fileInput = document.getElementById("admin-image-file");
   if (fileInput.files && fileInput.files[0]) {
     image = await toBase64(fileInput.files[0]);
   }
 
   if (!name || !category) {
-    alert("Nombre y categoría son obligatorios");
+    alert("❌ Nombre y categoría son obligatorios");
     return;
   }
 
-  if (idx === "new") {
-    const newProduct = {
-      id: `custom-${Date.now()}`,
-      category,
-      name,
-      shortDescription: desc.slice(0, 60),
-      description: desc || "",
-      price: price,
-      priceFrom: price,
-      image: image || "placeholder.jpg"
-    };
-    await addOrUpdateProduct(newProduct);
-    alert("✅ Producto creado!");
-  } else {
-    const p = products[idx];
-    p.category = category;           // ← Guardamos exactamente lo seleccionado
-    p.name = name;
-    p.description = desc || "";
-    p.shortDescription = desc.slice(0, 60);
-    if (price !== null) p.price = p.priceFrom = price;
-    if (image) p.image = image;
+  const productData = {
+    id: idx === "new" ? `prod-${Date.now()}` : products[idx].id,
+    category,
+    name,
+    shortDescription: desc.slice(0, 80),
+    description: desc,
+    price: price,
+    priceFrom: price,
+    image: image || "placeholder.jpg"
+  };
 
-    await addOrUpdateProduct(p);
-    alert("✅ Producto actualizado!");
+  try {
+    await addOrUpdateProduct(productData);
+    alert(idx === "new" ? "✅ Nuevo producto creado correctamente" : "✅ Producto actualizado correctamente");
+    hideAdminPanel();
+    setTimeout(() => location.reload(), 800);
+  } catch (e) {
+    console.error(e);
+    alert("Error al guardar: " + e.message);
   }
-
-  hideAdminPanel();
-  setTimeout(() => location.reload(), 700);
 }
 
-// ==================== ELIMINAR ====================
+// ==================== ELIMINAR PRODUCTO ====================
 async function deleteAdminProduct() {
   const idx = document.getElementById("admin-product-select").value;
   if (idx === "new") return;
-
   const p = products[idx];
   if (!confirm(`¿Eliminar "${p.name}"?`)) return;
 
-  await deleteProduct(p.id);
-  alert("Producto eliminado");
+  try {
+    await deleteProduct(p.id);
+    alert("Producto eliminado");
+    hideAdminPanel();
+    setTimeout(() => location.reload(), 800);
+  } catch (e) {
+    alert("Error al eliminar");
+  }
+}
+
+// ==================== OFERTAS (se mantiene todo) ====================
+async function loadAdminOffers() {
+  offers = await getAllOffers().catch(() => []);
+  const select = document.getElementById("admin-offer-select");
+  if (!select) return;
+
+  select.innerHTML = "";
+  offers.forEach((o, i) => {
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = o.title;
+    select.appendChild(opt);
+  });
+
+  const optNew = document.createElement("option");
+  optNew.value = "new";
+  optNew.textContent = "➕ Nueva oferta";
+  select.appendChild(optNew);
+
+  select.onchange = () => fillOfferFields(select.value);
+  fillOfferFields("new");
+}
+
+function fillOfferFields(idx) {
+  const deleteBtn = document.getElementById("admin-offer-delete");
+  if (deleteBtn) deleteBtn.style.display = (idx === "new") ? "none" : "block";
+
+  if (idx === "new") {
+    document.getElementById("admin-offer-title").value = "";
+    document.getElementById("admin-offer-desc").value = "";
+    return;
+  }
+
+  const o = offers[idx];
+  if (o) {
+    document.getElementById("admin-offer-title").value = o.title || "";
+    document.getElementById("admin-offer-desc").value = o.description || "";
+  }
+}
+
+async function handleSaveOffer() {
+  const idx = document.getElementById("admin-offer-select").value;
+  const title = document.getElementById("admin-offer-title").value.trim();
+  const description = document.getElementById("admin-offer-desc").value.trim();
+
+  if (!title) return alert("El título es obligatorio");
+
+  const offerData = {
+    id: idx === "new" ? `off-${Date.now()}` : offers[idx].id,
+    title,
+    description,
+    date: new Date().toISOString()
+  };
+
+  await saveOffer(offerData);
+  alert("✅ Oferta guardada");
   hideAdminPanel();
   setTimeout(() => location.reload(), 700);
 }
 
+async function handleDeleteOffer() {
+  const idx = document.getElementById("admin-offer-select").value;
+  if (idx === "new") return;
+  if (!confirm("¿Eliminar esta oferta?")) return;
+
+  await deleteOffer(offers[idx].id);
+  alert("Oferta eliminada");
+  hideAdminPanel();
+  setTimeout(() => location.reload(), 700);
+}
+
+// ==================== UTILIDADES ====================
 function toBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
+    reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(file);
   });
 }
@@ -178,21 +237,21 @@ function updateAdminImagePreview(src) {
   if (src && src.length > 20) img.src = src;
 }
 
-// ==================== INICIALIZACIÓN ====================
+// ==================== INICIALIZACIÓN DE BOTONES ====================
 document.addEventListener("DOMContentLoaded", () => {
-  // Esperar un momento para que el HTML del panel esté cargado
   setTimeout(() => {
-    const closeBtn = document.getElementById("admin-close");
+    // Botones de Productos
     const saveBtn = document.getElementById("admin-save");
     const deleteBtn = document.getElementById("admin-delete");
+    const closeBtn = document.getElementById("admin-close");
     const addCatBtn = document.getElementById("admin-add-category");
 
-    if (closeBtn) closeBtn.onclick = hideAdminPanel;
-    if (saveBtn) saveBtn.onclick = saveAdminProduct;
-    if (deleteBtn) deleteBtn.onclick = deleteAdminProduct;
+    if (saveBtn) saveBtn.addEventListener("click", saveAdminProduct);
+    if (deleteBtn) deleteBtn.addEventListener("click", deleteAdminProduct);
+    if (closeBtn) closeBtn.addEventListener("click", hideAdminPanel);
 
     if (addCatBtn) {
-      addCatBtn.onclick = async () => {
+      addCatBtn.addEventListener("click", async () => {
         const input = document.getElementById('admin-new-category');
         const val = input.value.trim();
         if (val) {
@@ -200,10 +259,17 @@ document.addEventListener("DOMContentLoaded", () => {
           await refreshCategories();
           input.value = '';
         }
-      };
+      });
     }
 
-    // Vista previa de imagen
+    // Botones de Ofertas
+    const offerSaveBtn = document.getElementById("admin-offer-save");
+    const offerDeleteBtn = document.getElementById("admin-offer-delete");
+
+    if (offerSaveBtn) offerSaveBtn.addEventListener("click", handleSaveOffer);
+    if (offerDeleteBtn) offerDeleteBtn.addEventListener("click", handleDeleteOffer);
+
+    // Vista previa imagen
     const urlInput = document.getElementById("admin-image");
     if (urlInput) urlInput.addEventListener("input", () => updateAdminImagePreview(urlInput.value));
 
@@ -214,5 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateAdminImagePreview(base64);
       }
     });
-  }, 300); // pequeño delay para asegurar que el HTML esté cargado
+
+    console.log("✅ Admin.js inicializado correctamente");
+  }, 500);
 });

@@ -1,8 +1,8 @@
-// products-module.js - VERSIÓN ESTABLE Y SIMPLE
+// products-module.js - VERSIÓN ULTRA SIMPLE Y ROBUSTA (2026)
 
 import { getAllProducts, addOrUpdateProduct } from './db.js';
 
-async function init() {.
+async function init() {
   console.log("🚀 Iniciando renderizado de productos...");
 
   let products = await getAllProducts();
@@ -18,22 +18,18 @@ async function init() {.
       { id: "encargo-especial", category: "Encargos especiales", name: "Torta Personalizada", shortDescription: "Según tu idea.", description: "...", priceFrom: 35000, image: "encargos-1.jpg" }
     ];
 
-    for (const p of initialProducts) {
-      await addOrUpdateProduct(p);
-    }
+    for (const p of initialProducts) await addOrUpdateProduct(p);
     products = await getAllProducts();
   }
 
-  console.log(`Total productos cargados: ${products.length}`);
-
-  // Renderizado simple y directo
-  renderProductsSimple(products);
+  console.log(`Total productos: ${products.length}`);
+  renderAll(products);
 }
 
-function renderProductsSimple(products) {
+function renderAll(products) {
   const container = document.getElementById("dynamic-categories");
   if (!container) {
-    console.error("No se encontró el contenedor #dynamic-categories");
+    console.error("❌ No se encontró #dynamic-categories");
     return;
   }
 
@@ -42,70 +38,58 @@ function renderProductsSimple(products) {
   // Agrupar por categoría
   const grouped = {};
   products.forEach(p => {
-    if (!p.category) return;
-    if (!grouped[p.category]) grouped[p.category] = [];
-    grouped[p.category].push(p);
+    const cat = p.category || "Sin categoría";
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(p);
   });
 
-  // 1. Definir tu orden personalizado
-  const ordenDeseado = [
-    'Tortas', 
-    'Tortas frías', 
-    'Postres', 
-    'Encargos especiales', 
-    'Galletas'
-  ];
+  // Orden deseado
+  const order = ["Tortas", "Tortas frías", "Galletas", "Postres", "Encargos especiales"];
 
-  // 2. Extraer las categorías que existen y ordenarlas
-  const categoriasOrdenadas = Object.keys(grouped).sort((a, b) => {
-    let posicionA = ordenDeseado.indexOf(a);
-    let posicionB = ordenDeseado.indexOf(b);
-    
-    // Si creas una categoría nueva que no está en la lista, se va al final (posición 999)
-    if (posicionA === -1) posicionA = 999;
-    if (posicionB === -1) posicionB = 999;
-    
-    return posicionA - posicionB;
+  const sortedCategories = Object.keys(grouped).sort((a, b) => {
+    const ia = order.indexOf(a);
+    const ib = order.indexOf(b);
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
   });
 
-  // 3. Renderizar en pantalla siguiendo el nuevo orden
-  categoriasOrdenadas.forEach(category => {
-    const prods = grouped[category];
+  sortedCategories.forEach(cat => {
+    const prods = grouped[cat];
 
-    const html = `
-      <section class="section">
-        <div class="container">
-          <h2 class="section-title">${category}</h2>
-          <div class="product-grid">
-            ${prods.map(prod => {
-              const price = prod.priceFrom || prod.price || 0;
-              return `
-                <div class="product-card">
-                  <a href="product.html?id=${prod.id}">
-                    <img src="${prod.image || 'placeholder.jpg'}" alt="${prod.name}" loading="lazy" style="width:100%; height:200px; object-fit:cover;">
-                    <div style="padding:12px;">
-                      <h3>${prod.name}</h3>
-                      <p style="color:#666; font-size:14px;">${prod.shortDescription || ''}</p>
-                      <p style="font-weight:bold; margin:8px 0 0 0;">$${price.toLocaleString('es-CO')}</p>
-                    </div>
-                  </a>
-                </div>
-              `;
-            }).join('')}
+    let cards = '';
+    prods.forEach(prod => {
+      const price = prod.priceFrom || prod.price || 0;
+      cards += `
+        <div style="background:#fff; border:1px solid #eee; border-radius:12px; overflow:hidden; margin-bottom:20px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+          <a href="product.html?id=${prod.id}" style="text-decoration:none; color:inherit;">
+            <img src="${prod.image || 'placeholder.jpg'}" style="width:100%; height:220px; object-fit:cover;" alt="${prod.name}" loading="lazy">
+            <div style="padding:16px;">
+              <h3 style="margin:0 0 8px 0; font-size:19px;">${prod.name}</h3>
+              <p style="margin:0 0 12px 0; color:#666; font-size:14px;">${prod.shortDescription || ''}</p>
+              <div style="font-weight:700; color:#2b1d16;">$${price.toLocaleString('es-CO')}</div>
+            </div>
+          </a>
+        </div>
+      `;
+    });
+
+    const sectionHTML = `
+      <section style="padding:40px 0; border-bottom:1px solid #eee;">
+        <div style="max-width:1120px; margin:0 auto; padding:0 20px;">
+          <h2 style="font-family:'Playfair Display',serif; font-size:32px; margin-bottom:24px; color:#2b1d16;">${cat}</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
+            ${cards}
           </div>
         </div>
       </section>
     `;
 
-    container.innerHTML += html;
+    container.innerHTML += sectionHTML;
   });
 
-  console.log("Renderizado completado");
+  console.log(`✅ Renderizadas ${sortedCategories.length} categorías correctamente`);
 }
 
-// Iniciar
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
+// Al final del archivo, reemplaza la parte de iniciar por:
+document.addEventListener('DOMContentLoaded', init);
