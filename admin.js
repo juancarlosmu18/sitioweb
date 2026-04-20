@@ -1,4 +1,4 @@
-// admin.js - VERSIÓN CORREGIDA Y ROBUSTA (Botón Guardar debe funcionar)
+// admin.js - Versión FINAL con botón Exportar JSON (verificada)
 
 import { getAllProducts, addOrUpdateProduct, deleteProduct } from './db.js';
 import { getAllCategories, addCategory } from './categories-db.js';
@@ -85,14 +85,12 @@ function fillAdminFields(idx) {
   document.getElementById("admin-image").value = p ? (p.image || "") : "";
 
   const catSelect = document.getElementById("admin-category");
-  if (catSelect && p && p.category) catSelect.value = p.category;
+  if (catSelect && p?.category) catSelect.value = p.category;
 
   updateAdminImagePreview(p ? p.image : "");
 }
 
 async function saveAdminProduct() {
-  console.log("🔵 Botón Guardar presionado - intentando guardar..."); // Para depurar
-
   const idx = document.getElementById("admin-product-select").value;
   const category = document.getElementById("admin-category").value.trim();
   const name = document.getElementById("admin-name").value.trim();
@@ -132,7 +130,6 @@ async function saveAdminProduct() {
   }
 }
 
-// ==================== ELIMINAR PRODUCTO ====================
 async function deleteAdminProduct() {
   const idx = document.getElementById("admin-product-select").value;
   if (idx === "new") return;
@@ -149,7 +146,34 @@ async function deleteAdminProduct() {
   }
 }
 
-// ==================== OFERTAS (se mantiene todo) ====================
+// ==================== BOTÓN EXPORTAR JSON ====================
+async function exportProductsToJSON() {
+  try {
+    const allProducts = await getAllProducts();
+    
+    const data = {
+      lastUpdated: new Date().toISOString(),
+      products: allProducts
+    };
+
+    const jsonString = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'products-data.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    alert(`✅ Archivo products-data.json descargado correctamente.\n\nAhora súbelo a la raíz de tu repositorio en GitHub.`);
+  } catch (e) {
+    alert("Error al exportar: " + e.message);
+  }
+}
+
+// ==================== OFERTAS ====================
 async function loadAdminOffers() {
   offers = await getAllOffers().catch(() => []);
   const select = document.getElementById("admin-offer-select");
@@ -237,7 +261,7 @@ function updateAdminImagePreview(src) {
   if (src && src.length > 20) img.src = src;
 }
 
-// ==================== INICIALIZACIÓN DE BOTONES ====================
+// ==================== INICIALIZACIÓN ====================
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     // Botones de Productos
@@ -265,22 +289,31 @@ document.addEventListener("DOMContentLoaded", () => {
     // Botones de Ofertas
     const offerSaveBtn = document.getElementById("admin-offer-save");
     const offerDeleteBtn = document.getElementById("admin-offer-delete");
-
     if (offerSaveBtn) offerSaveBtn.addEventListener("click", handleSaveOffer);
     if (offerDeleteBtn) offerDeleteBtn.addEventListener("click", handleDeleteOffer);
 
-    // Vista previa imagen
-    const urlInput = document.getElementById("admin-image");
-    if (urlInput) urlInput.addEventListener("input", () => updateAdminImagePreview(urlInput.value));
+    // ==================== BOTÓN EXPORTAR JSON ====================
+    const exportBtn = document.createElement("button");
+    exportBtn.textContent = "📤 Exportar productos a JSON";
+    exportBtn.style.cssText = `
+      width:100%; 
+      padding:14px; 
+      margin-top:20px; 
+      background:#2b1d16; 
+      color:white; 
+      border:none; 
+      border-radius:8px; 
+      font-weight:bold; 
+      cursor:pointer;
+      font-size:16px;
+    `;
+    exportBtn.onclick = exportProductsToJSON;
 
-    const fileInput = document.getElementById("admin-image-file");
-    if (fileInput) fileInput.addEventListener("change", async () => {
-      if (fileInput.files[0]) {
-        const base64 = await toBase64(fileInput.files[0]);
-        updateAdminImagePreview(base64);
-      }
-    });
+    const panelContent = document.querySelector("#admin-panel > div");
+    if (panelContent) {
+      panelContent.appendChild(exportBtn);
+    }
 
-    console.log("✅ Admin.js inicializado correctamente");
+    console.log("✅ Admin.js inicializado correctamente con botón Exportar");
   }, 500);
 });
