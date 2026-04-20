@@ -1,41 +1,50 @@
-// products-module.js - VERSIÓN ULTRA SIMPLE Y ROBUSTA (2026)
+// products-module.js - Versión con soporte JSON + IndexedDB (Opción A)
 
 import { getAllProducts, addOrUpdateProduct } from './db.js';
 
 async function init() {
   console.log("🚀 Iniciando renderizado de productos...");
 
-  let products = await getAllProducts();
+  // 1. Intentar cargar desde JSON (archivo estático en GitHub)
+  let products = await loadProductsFromJSON();
 
+  // 2. Si el JSON falla o está vacío, usar IndexedDB
+  if (!products || products.length === 0) {
+    products = await getAllProducts();
+  }
+
+  // 3. Si aún no hay nada, sembrar iniciales
   if (products.length === 0) {
     console.log("🌱 Sembrando productos iniciales...");
-    const initialProducts = [
-      { id: "torta-vainilla", category: "Tortas", name: "Torta de Vainilla", shortDescription: "Clásica y suave.", description: "Torta artesanal de vainilla...", priceFrom: 25000, image: "tortas-1.jpg" },
-      { id: "torta-chocolate", category: "Tortas", name: "Torta de Chocolate", shortDescription: "Intensa y húmeda.", description: "...", priceFrom: 25000, image: "tortas-2.jpg" },
-      { id: "pionono", category: "Tortas frías", name: "1/2 lb pionono", shortDescription: "Suave, cremosa y perfecta para servir fría.", description: "Suave, cremosa y perfecta para servir fría.", priceFrom: 45000, image: "pionono.jpg" },
-      { id: "galletas-manteca", category: "Galletas", name: "Galletas de Manteca", shortDescription: "Clásicas y crocantes.", description: "...", price: 6500, image: "galletas-1.jpg" },
-      { id: "postre-choco", category: "Postres", name: "Postre de Chocolate", shortDescription: "Delicioso y cremoso.", description: "...", price: 12000, image: "postres-1.jpg" },
-      { id: "encargo-especial", category: "Encargos especiales", name: "Torta Personalizada", shortDescription: "Según tu idea.", description: "...", priceFrom: 35000, image: "encargos-1.jpg" }
-    ];
-
+    const initialProducts = [ /* tus productos iniciales aquí */ ];
     for (const p of initialProducts) await addOrUpdateProduct(p);
     products = await getAllProducts();
   }
 
-  console.log(`Total productos: ${products.length}`);
+  console.log(`Total productos cargados: ${products.length}`);
   renderAll(products);
+}
+
+// Cargar desde products-data.json (prioridad alta)
+async function loadProductsFromJSON() {
+  try {
+    const response = await fetch('products-data.json?v=' + Date.now());
+    if (!response.ok) throw new Error('JSON no encontrado');
+    const data = await response.json();
+    console.log("✅ Productos cargados desde JSON");
+    return data.products || [];
+  } catch (e) {
+    console.log("JSON no disponible, usando IndexedDB");
+    return [];
+  }
 }
 
 function renderAll(products) {
   const container = document.getElementById("dynamic-categories");
-  if (!container) {
-    console.error("❌ No se encontró #dynamic-categories");
-    return;
-  }
+  if (!container) return;
 
   container.innerHTML = '';
 
-  // Agrupar por categoría
   const grouped = {};
   products.forEach(p => {
     const cat = p.category || "Sin categoría";
@@ -43,53 +52,44 @@ function renderAll(products) {
     grouped[cat].push(p);
   });
 
-  // Orden deseado
   const order = ["Tortas", "Tortas frías", "Galletas", "Postres", "Encargos especiales"];
 
-  const sortedCategories = Object.keys(grouped).sort((a, b) => {
+  const sortedCats = Object.keys(grouped).sort((a, b) => {
     const ia = order.indexOf(a);
     const ib = order.indexOf(b);
-    if (ia === -1) return 1;
-    if (ib === -1) return -1;
-    return ia - ib;
+    return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
   });
 
-  sortedCategories.forEach(cat => {
+  sortedCats.forEach(cat => {
     const prods = grouped[cat];
-
-    let cards = '';
-    prods.forEach(prod => {
+    let cardsHTML = prods.map(prod => {
       const price = prod.priceFrom || prod.price || 0;
-      cards += `
-        <div style="background:#fff; border:1px solid #eee; border-radius:12px; overflow:hidden; margin-bottom:20px; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-          <a href="product.html?id=${prod.id}" style="text-decoration:none; color:inherit;">
+      return `
+        <div style="background:#fff; border:1px solid #eee; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+          <a href="product.html?id=${prod.id}">
             <img src="${prod.image || 'placeholder.jpg'}" style="width:100%; height:220px; object-fit:cover;" alt="${prod.name}" loading="lazy">
             <div style="padding:16px;">
-              <h3 style="margin:0 0 8px 0; font-size:19px;">${prod.name}</h3>
-              <p style="margin:0 0 12px 0; color:#666; font-size:14px;">${prod.shortDescription || ''}</p>
-              <div style="font-weight:700; color:#2b1d16;">$${price.toLocaleString('es-CO')}</div>
+              <h3 style="margin:0 0 8px;">${prod.name}</h3>
+              <p style="color:#666; font-size:14px; margin:0 0 12px;">${prod.shortDescription || ''}</p>
+              <div style="font-weight:700;">$${price.toLocaleString('es-CO')}</div>
             </div>
           </a>
         </div>
       `;
-    });
+    }).join('');
 
-    const sectionHTML = `
-      <section style="padding:40px 0; border-bottom:1px solid #eee;">
+    container.innerHTML += `
+      <section style="padding:40px 0;">
         <div style="max-width:1120px; margin:0 auto; padding:0 20px;">
-          <h2 style="font-family:'Playfair Display',serif; font-size:32px; margin-bottom:24px; color:#2b1d16;">${cat}</h2>
+          <h2 style="font-size:32px; margin-bottom:24px;">${cat}</h2>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
-            ${cards}
+            ${cardsHTML}
           </div>
         </div>
       </section>
     `;
-
-    container.innerHTML += sectionHTML;
   });
-
-  console.log(`✅ Renderizadas ${sortedCategories.length} categorías correctamente`);
 }
 
-// Al final del archivo, reemplaza la parte de iniciar por:
+// Iniciar
 document.addEventListener('DOMContentLoaded', init);

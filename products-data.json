@@ -1,0 +1,32 @@
+{
+  "lastUpdated": "2026-04-20",
+  "products": [
+    {
+      "id": "torta-vainilla",
+      "category": "Tortas",
+      "name": "Torta de Vainilla",
+      "shortDescription": "Clásica y suave.",
+      "description": "Torta artesanal de vainilla con textura perfecta.",
+      "priceFrom": 25000,
+      "image": "tortas-1.jpg"
+    },
+    {
+      "id": "torta-chocolate",
+      "category": "Tortas",
+      "name": "Torta de Chocolate",
+      "shortDescription": "Intensa y húmeda.",
+      "description": "Torta de chocolate con sabor profundo a cacao.",
+      "priceFrom": 25000,
+      "image": "tortas-2.jpg"
+    },
+    {
+      "id": "pionono",
+      "category": "Tortas frías",
+      "name": "1/2 lb pionono",
+      "shortDescription": "Suave, cremosa y perfecta para servir fría.",
+      "description": "Pionono relleno de crema, ideal para servir frío.",
+      "priceFrom": 45000,
+      "image": "pionono.jpg"
+    }
+  ]
+}
