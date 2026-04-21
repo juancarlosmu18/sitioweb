@@ -1,50 +1,56 @@
-// products-module.js - Versión con soporte JSON + IndexedDB (Opción A)
+// products-module.js - Versión OPTIMIZADA para muchas referencias
 
 import { getAllProducts, addOrUpdateProduct } from './db.js';
 
 async function init() {
-  console.log("🚀 Iniciando renderizado de productos...");
+  console.log("🚀 Iniciando renderizado optimizado...");
 
-  // 1. Intentar cargar desde JSON (archivo estático en GitHub)
-  let products = await loadProductsFromJSON();
+  let products = await loadProductsFromJSON();   // Prioridad al JSON
 
-  // 2. Si el JSON falla o está vacío, usar IndexedDB
   if (!products || products.length === 0) {
     products = await getAllProducts();
   }
 
-  // 3. Si aún no hay nada, sembrar iniciales
   if (products.length === 0) {
-    console.log("🌱 Sembrando productos iniciales...");
-    const initialProducts = [ /* tus productos iniciales aquí */ ];
+    console.log("🌱 Sembrando iniciales...");
+    const initialProducts = [
+      { id: "torta-vainilla", category: "Tortas", name: "Torta de Vainilla", shortDescription: "Clásica y suave.", priceFrom: 25000, image: "tortas-1.jpg" },
+      { id: "torta-chocolate", category: "Tortas", name: "Torta de Chocolate", shortDescription: "Intensa y húmeda.", priceFrom: 25000, image: "tortas-2.jpg" },
+      { id: "pionono", category: "Tortas frías", name: "1/2 lb pionono", shortDescription: "Suave, cremosa y perfecta para servir fría.", priceFrom: 45000, image: "pionono.jpg" },
+      { id: "galletas-manteca", category: "Galletas", name: "Galletas de Manteca", shortDescription: "Clásicas y crocantes.", price: 6500, image: "galletas-1.jpg" },
+      { id: "postre-choco", category: "Postres", name: "Postre de Chocolate", shortDescription: "Delicioso y cremoso.", price: 12000, image: "postres-1.jpg" },
+      { id: "encargo-especial", category: "Encargos especiales", name: "Torta Personalizada", shortDescription: "Según tu idea.", priceFrom: 35000, image: "encargos-1.jpg" }
+    ];
     for (const p of initialProducts) await addOrUpdateProduct(p);
     products = await getAllProducts();
   }
 
-  console.log(`Total productos cargados: ${products.length}`);
-  renderAll(products);
+  console.log(`Total productos: ${products.length}`);
+  renderOptimized(products);
 }
 
-// Cargar desde products-data.json (prioridad alta)
+// Cargar desde JSON (más rápido y actualizable vía GitHub)
 async function loadProductsFromJSON() {
   try {
-    const response = await fetch('products-data.json?v=' + Date.now());
-    if (!response.ok) throw new Error('JSON no encontrado');
+    const response = await fetch(`products-data.json?v=${Date.now()}`);
+    if (!response.ok) return null;
     const data = await response.json();
-    console.log("✅ Productos cargados desde JSON");
     return data.products || [];
   } catch (e) {
-    console.log("JSON no disponible, usando IndexedDB");
-    return [];
+    return null;
   }
 }
 
-function renderAll(products) {
+function renderOptimized(products) {
   const container = document.getElementById("dynamic-categories");
-  if (!container) return;
+  if (!container) {
+    console.error("No se encontró #dynamic-categories");
+    return;
+  }
 
   container.innerHTML = '';
 
+  // Agrupar por categoría
   const grouped = {};
   products.forEach(p => {
     const cat = p.category || "Sin categoría";
@@ -52,43 +58,68 @@ function renderAll(products) {
     grouped[cat].push(p);
   });
 
+  // Orden deseado
   const order = ["Tortas", "Tortas frías", "Galletas", "Postres", "Encargos especiales"];
 
-  const sortedCats = Object.keys(grouped).sort((a, b) => {
+  const sortedCategories = Object.keys(grouped).sort((a, b) => {
     const ia = order.indexOf(a);
     const ib = order.indexOf(b);
     return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
   });
 
-  sortedCats.forEach(cat => {
-    const prods = grouped[cat];
-    let cardsHTML = prods.map(prod => {
-      const price = prod.priceFrom || prod.price || 0;
-      return `
-        <div style="background:#fff; border:1px solid #eee; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-          <a href="product.html?id=${prod.id}">
-            <img src="${prod.image || 'placeholder.jpg'}" style="width:100%; height:220px; object-fit:cover;" alt="${prod.name}" loading="lazy">
-            <div style="padding:16px;">
-              <h3 style="margin:0 0 8px;">${prod.name}</h3>
-              <p style="color:#666; font-size:14px; margin:0 0 12px;">${prod.shortDescription || ''}</p>
-              <div style="font-weight:700;">$${price.toLocaleString('es-CO')}</div>
-            </div>
-          </a>
-        </div>
-      `;
-    }).join('');
+  const fragment = document.createDocumentFragment();
 
-    container.innerHTML += `
-      <section style="padding:40px 0;">
-        <div style="max-width:1120px; margin:0 auto; padding:0 20px;">
-          <h2 style="font-size:32px; margin-bottom:24px;">${cat}</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
-            ${cardsHTML}
-          </div>
-        </div>
-      </section>
+  sortedCategories.forEach(cat => {
+    const prods = grouped[cat];
+
+    const section = document.createElement('section');
+    section.style.cssText = 'padding: 40px 0; border-bottom: 1px solid #eee;';
+
+    section.innerHTML = `
+      <div style="max-width:1120px; margin:0 auto; padding:0 20px;">
+        <h2 style="font-family:'Playfair Display',serif; font-size:32px; margin-bottom:24px; color:#2b1d16;">${cat}</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;" id="grid-${cat.replace(/\s+/g, '-')}"></div>
+      </div>
     `;
+
+    fragment.appendChild(section);
+
+    // Renderizar tarjetas de forma eficiente
+    const grid = section.querySelector(`#grid-${cat.replace(/\s+/g, '-')}`);
+    const gridFragment = document.createDocumentFragment();
+
+    prods.forEach(prod => {
+      const price = prod.priceFrom || prod.price || 0;
+      const card = document.createElement('div');
+      card.style.cssText = `
+        background:#fff; 
+        border:1px solid #eee; 
+        border-radius:12px; 
+        overflow:hidden; 
+        box-shadow:0 4px 12px rgba(0,0,0,0.05);
+      `;
+
+      card.innerHTML = `
+        <a href="product.html?id=${prod.id}" style="text-decoration:none; color:inherit;">
+          <img src="${prod.image || 'placeholder.jpg'}" 
+               style="width:100%; height:220px; object-fit:cover;" 
+               alt="${prod.name}" loading="lazy">
+          <div style="padding:16px;">
+            <h3 style="margin:0 0 8px 0; font-size:19px;">${prod.name}</h3>
+            <p style="margin:0 0 12px 0; color:#666; font-size:14px;">${prod.shortDescription || ''}</p>
+            <div style="font-weight:700; color:#2b1d16;">$${price.toLocaleString('es-CO')}</div>
+          </div>
+        </a>
+      `;
+
+      gridFragment.appendChild(card);
+    });
+
+    grid.appendChild(gridFragment);
   });
+
+  container.appendChild(fragment);
+  console.log(`✅ Renderizadas ${sortedCategories.length} categorías de forma optimizada`);
 }
 
 // Iniciar
