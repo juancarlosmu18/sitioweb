@@ -52,11 +52,11 @@ function initWhatsAppLinks() {
 
 // Construye el enlace de WhatsApp con el número y mensaje
 function buildWhatsAppLink(message) {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  return https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)};
 }
 // Renderiza una tarjeta de producto para el catálogo
 function renderProductCard(product) {
-  return `
+  return 
     <div class="product-card">
       <a href="product.html?id=${encodeURIComponent(product.id)}" class="product-card-link">
         <img src="${product.image}" alt="${escapeHtml(product.name)}" class="product-card-img" />
@@ -67,7 +67,7 @@ function renderProductCard(product) {
         </div>
       </a>
     </div>
-  `;
+  ;
 }
 
 // Formatea el precio en pesos colombianos
@@ -167,7 +167,7 @@ function main() {
   initMobileNav();
   initWhatsAppLinks();
  // initVisitCounter();
- // initProductGrids();
+  initProductGrids();
  // initProductDetail();
   initFadeIn();
 }
