@@ -166,7 +166,7 @@ function main() {
   initWhatsAppLinks();
   initVisitCounter();
   //initProductGrids();
-  initProductDetail();
+  //initProductDetail();
   initFadeIn();
 }
 
