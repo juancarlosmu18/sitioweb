@@ -15,10 +15,10 @@ const ASSETS = [
   '/manifest.json',
   '/favicon.ico',
   '/favicon-32x32.png',
-  '/apple-touch-icon.png',
+  '/apple-touch-icon.png'
   '/ofertas.html',
   '/offers.js',
-  '/offers-db.js'
+  '/offers-db.js',
 ];
 
 // Instalación: cachear solo archivos esenciales y forzar actualización

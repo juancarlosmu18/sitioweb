@@ -8,14 +8,14 @@ if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
 }
 // ==================== CONTADOR DE VISITAS ====================
 // Comentado temporalmente porque la API da error (nombre incorrecto)
-// function initVisitCounter() {
- // const el = document.querySelector('[data-visit-count]');
- // if (!el) return;
+function initVisitCounter() {
+  const el = document.querySelector('[data-visit-count]');
+  if (!el) return;
   
   // Mostramos un valor por defecto mientras arreglamos
- // el.textContent = "—";
- // console.log("Contador de visitas desactivado temporalmente");
-
+  el.textContent = "—";
+  console.log("Contador de visitas desactivado temporalmente");
+}
 
 // Si quieres dejarla pero corregida, usa esta versión:
 async function initVisitCounter() {
@@ -24,19 +24,21 @@ async function initVisitCounter() {
   
   try {
     const resp = await fetch('https://api.countapi.xyz/hit/cocoayvainilla/visitas', {
-     // method: 'GET',
-     // signal: AbortSignal.timeout(4000)
+      method: 'GET',
+      signal: AbortSignal.timeout(4000)
     });
     
-    // if (resp.ok) {
-       const data = await resp.json();
-    el.textContent = data.value;
-  } catch (error) {
-    console.error(error);
-    el.textContent = "0";
+    if (resp.ok) {
+      const data = await resp.json();
+      el.textContent = data.value || "0";
+    } else {
+      el.textContent = "—";
+    }
+  } catch (err) {
+    el.textContent = "—";
+    console.log("Contador de visitas no disponible");
   }
 }
-
 // Inicializa los enlaces de WhatsApp en la página de contacto y otros lugares
 function initWhatsAppLinks() {
   const links = document.querySelectorAll('[data-whatsapp-link]');
@@ -164,9 +166,9 @@ function main() {
   //initYear();
   initMobileNav();
   initWhatsAppLinks();
-  initVisitCounter();
-  initProductGrids();
-  initProductDetail();
+ // initVisitCounter();
+ // initProductGrids();
+ // initProductDetail();
   initFadeIn();
 }
 
