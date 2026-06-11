@@ -165,8 +165,6 @@ function main() {
   initMobileNav();
   initWhatsAppLinks();
   initVisitCounter();
-  //initProductGrids();
-  //initProductDetail();
   initFadeIn();
 }
 
