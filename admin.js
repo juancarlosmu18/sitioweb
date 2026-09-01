@@ -1,7 +1,7 @@
 // admin.js - Versión FINAL con botón Exportar JSON (verificada)
 
 import { getAllProducts, addOrUpdateProduct, deleteProduct } from './db.js';
-import { getAllCategories, addCategory } from './categories-db.js';
+import { getAllCategories, getCategoryNames, addCategory } from './categories-db.js';
 import { getAllOffers, saveOffer, deleteOffer } from './offers-db.js';
 
 let products = [];
@@ -36,8 +36,7 @@ function renderCategoryOptions() {
   if (!select) return;
   select.innerHTML = '';
 
-  const defaultCats = ['Tortas', 'Tortas frías', 'Galletas', 'Postres', 'Encargos especiales'];
-  const allCats = [...new Set([...defaultCats, ...categories.map(c => c.name)])];
+  const allCats = getCategoryNames(products, categories);
 
   allCats.forEach(name => {
     const opt = document.createElement('option');
@@ -81,7 +80,7 @@ function fillAdminFields(idx) {
 
   document.getElementById("admin-name").value = p ? (p.name || "") : "";
   document.getElementById("admin-desc").value = p ? (p.description || p.shortDescription || "") : "";
-  document.getElementById("admin-price").value = p ? (p.priceFrom || p.price || "") : "";
+  document.getElementById("admin-price").value = p ? (p.pricing?.amount ?? p.priceFrom ?? p.price ?? "") : "";
   document.getElementById("admin-image").value = p ? (p.image || "") : "";
 
   const catSelect = document.getElementById("admin-category");
@@ -100,7 +99,8 @@ async function saveAdminProduct() {
   let image = document.getElementById("admin-image").value.trim();
   const fileInput = document.getElementById("admin-image-file");
   if (fileInput.files && fileInput.files[0]) {
-    image = await toBase64(fileInput.files[0]);
+    alert("La carga de archivos no está disponible: el sitio no tiene un servidor para almacenar imágenes. Usa una ruta publicada.");
+    return;
   }
 
   if (!name || !category) {
@@ -108,14 +108,25 @@ async function saveAdminProduct() {
     return;
   }
 
+  const existingProduct = idx === "new" ? {} : products[idx];
   const productData = {
+    ...existingProduct,
     id: idx === "new" ? `prod-${Date.now()}` : products[idx].id,
     category,
     name,
+    productName: existingProduct.productName || name,
+    size: existingProduct.size || null,
+    productType: existingProduct.productType || 'standard',
     shortDescription: desc.slice(0, 80),
     description: desc,
     price: price,
     priceFrom: price,
+    pricing: {
+      ...(existingProduct.pricing || {}),
+      type: existingProduct.productType === 'custom' ? 'custom' : 'fixed',
+      amount: price,
+      currency: 'COP'
+    },
     image: image || "placeholder.jpg"
   };
 

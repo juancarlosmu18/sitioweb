@@ -58,14 +58,7 @@ function renderOptimized(products) {
     grouped[cat].push(p);
   });
 
-  // Orden deseado
-  const order = ["Tortas", "Tortas frías", "Galletas", "Postres", "Encargos especiales"];
-
-  const sortedCategories = Object.keys(grouped).sort((a, b) => {
-    const ia = order.indexOf(a);
-    const ib = order.indexOf(b);
-    return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
-  });
+  const sortedCategories = Object.keys(grouped);
 
   const fragment = document.createDocumentFragment();
 
@@ -89,7 +82,7 @@ function renderOptimized(products) {
     const gridFragment = document.createDocumentFragment();
 
     prods.forEach(prod => {
-      const price = prod.priceFrom || prod.price || 0;
+      const price = getPricing(prod);
       const card = document.createElement('div');
       card.style.cssText = `
         background:#fff; 
@@ -107,7 +100,7 @@ function renderOptimized(products) {
           <div style="padding:16px;">
             <h3 style="margin:0 0 8px 0; font-size:19px;">${prod.name}</h3>
             <p style="margin:0 0 12px 0; color:#666; font-size:14px;">${prod.shortDescription || ''}</p>
-            <div style="font-weight:700; color:#2b1d16;">$${price.toLocaleString('es-CO')}</div>
+            <div style="font-weight:700; color:#2b1d16;">${formatPrice(price)}</div>
           </div>
         </a>
       `;
@@ -120,6 +113,23 @@ function renderOptimized(products) {
 
   container.appendChild(fragment);
   console.log(`✅ Renderizadas ${sortedCategories.length} categorías de forma optimizada`);
+}
+
+function getPricing(product) {
+  return product.pricing || {
+    type: product.priceFrom ? 'from' : 'fixed',
+    amount: product.priceFrom ?? product.price ?? 0,
+    currency: 'COP'
+  };
+}
+
+function formatPrice(pricing) {
+  const labels = { from: 'Desde ', variable: 'Precio variable', quote: 'Cotizar' };
+  const amount = Number(pricing.amount);
+  const formattedAmount = Number.isFinite(amount) && amount > 0
+    ? `$${amount.toLocaleString('es-CO')}`
+    : '';
+  return `${labels[pricing.type] || ''}${formattedAmount}`.trim() || 'Consultar precio';
 }
 
 // Iniciar

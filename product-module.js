@@ -38,7 +38,7 @@ async function initProductDetail() {
   }
 
   document.title = `${product.name} • Cocoa & Vainilla`;
-  const basePrice = product.priceFrom || product.price || 0;
+  const pricing = getPricing(product);
   
   // Construir mensaje de WhatsApp
   const phone = "573222391967"; 
@@ -52,11 +52,29 @@ async function initProductDetail() {
     <div class="product-detail-copy">
       <h1>${product.name}</h1>
       <p class="muted"><strong>Categoría:</strong> ${product.category}</p>
-      <p class="muted"><strong>Precio:</strong> $${basePrice.toLocaleString('es-CO')}</p>
+      <p class="muted"><strong>Precio:</strong> ${formatPrice(pricing)}</p>
+      ${pricing.note ? `<p class="muted">${pricing.note}</p>` : ''}
       <p>${product.description}</p>
       <a class="btn btn-primary" href="${waLink}" target="_blank">Pedir por WhatsApp</a>
     </div>
   `;
+}
+
+function getPricing(product) {
+  return product.pricing || {
+    type: product.priceFrom ? 'from' : 'fixed',
+    amount: product.priceFrom ?? product.price ?? 0,
+    currency: 'COP'
+  };
+}
+
+function formatPrice(pricing) {
+  const labels = { from: 'Desde ', variable: 'Precio variable', quote: 'Cotizar' };
+  const amount = Number(pricing.amount);
+  const formattedAmount = Number.isFinite(amount) && amount > 0
+    ? `$${amount.toLocaleString('es-CO')}`
+    : '';
+  return `${labels[pricing.type] || ''}${formattedAmount}`.trim() || 'Consultar precio';
 }
 
 if (document.readyState === 'loading') {

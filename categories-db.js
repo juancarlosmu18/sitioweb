@@ -28,6 +28,13 @@ export async function getAllCategories() {
   });
 }
 
+export function getCategoryNames(products = [], storedCategories = []) {
+  return [...new Set([
+    ...products.map(product => product.category).filter(Boolean),
+    ...storedCategories.map(category => category.name).filter(Boolean)
+  ])];
+}
+
 export async function addCategory(name) {
   const db = await openCatDB();
   return new Promise((resolve, reject) => {

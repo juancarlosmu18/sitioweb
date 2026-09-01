@@ -1,5 +1,23 @@
 {
   "lastUpdated": "2026-06-08T22:02:24.939Z",
+  "categories": [
+    {
+      "id": "tortas",
+      "name": "Tortas"
+    },
+    {
+      "id": "tortas-frias",
+      "name": "Tortas frías"
+    },
+    {
+      "id": "encargos-especiales",
+      "name": "Encargos especiales"
+    },
+    {
+      "id": "encargos-especiales-nina",
+      "name": "Encargos especiales para niña"
+    }
+  ],
   "products": [
     {
       "id": "prod-1776714581988",
@@ -9,7 +27,15 @@
       "description": "Ideal para celebraciones o para darte un gusto especial, es una torta que destaca por su sabor envolvente y su apariencia elegante. Un clásico que nunca pasa desapercibido.",
       "price": 45000,
       "priceFrom": 45000,
-      "image": "caramelo.jpg"
+      "image": "caramelo.jpg",
+      "size": "1/2 lb",
+      "productName": "Caramelo",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 45000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1776729824298",
@@ -19,37 +45,69 @@
       "description": "Ideal para celebraciones o para darte un gusto especial, es una torta que destaca por su sabor envolvente y su apariencia elegante. Un clásico que nunca pasa desapercibido.",
       "price": 25000,
       "priceFrom": 25000,
-      "image": "caramelo.jpg"
+      "image": "caramelo.jpg",
+      "size": "1/4 lb",
+      "productName": "Caramelo",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 25000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1776730155057",
       "category": "Tortas",
-      "name": "1/2 lb  Torta vainilla",
+      "name": "1/2 lb Torta Vainilla",
       "shortDescription": "La torta de vainilla es un clásico que nunca falla. Su bizcocho es suave, esponj",
       "description": "La torta de vainilla es un clásico que nunca falla. Su bizcocho es suave, esponjoso y delicadamente aromatizado, con ese sabor cálido y envolvente que la vainilla aporta en cada bocado.",
       "price": 45000,
       "priceFrom": 45000,
-      "image": "vainilla.jpg"
+      "image": "vainilla.jpg",
+      "size": "1/2 lb",
+      "productName": "Torta Vainilla",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 45000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1776730361289",
       "category": "Tortas",
-      "name": "1/4 lb Torta vainilla",
+      "name": "1/4 lb Torta Vainilla",
       "shortDescription": "La torta de vainilla es un clásico que nunca falla. Su bizcocho es suave, esponj",
       "description": "La torta de vainilla es un clásico que nunca falla. Su bizcocho es suave, esponjoso y delicadamente aromatizado, con ese sabor cálido y envolvente que la vainilla aporta en cada bocado.",
       "price": 25000,
       "priceFrom": 25000,
-      "image": "vainilla.jpg"
+      "image": "vainilla.jpg",
+      "size": "1/4 lb",
+      "productName": "Torta Vainilla",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 25000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1776730609867",
       "category": "Tortas",
-      "name": "1/2 lb Torta yogurt",
+      "name": "1/2 lb Torta Yogurt",
       "shortDescription": "La torta de yogurt es una opción suave y equilibrada, ideal para quienes prefier",
       "description": "La torta de yogurt es una opción suave y equilibrada, ideal para quienes prefieren un sabor más ligero y menos dulce. Su bizcocho es esponjoso y húmedo, con el toque característico del yogurt que aporta frescura y una ligera acidez muy agradable al paladar.",
       "price": 45000,
       "priceFrom": 45000,
-      "image": "tortas-1.jpg"
+      "image": "tortas-1.jpg",
+      "size": "1/2 lb",
+      "productName": "Torta Yogurt",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 45000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1776730933886",
@@ -59,7 +117,15 @@
       "description": "La torta de yogurt es una opción suave y equilibrada, ideal para quienes prefieren un sabor más ligero y menos dulce. Su bizcocho es esponjoso y húmedo, con el toque característico del yogurt que aporta frescura y una ligera acidez muy agradable al paladar.",
       "price": 25000,
       "priceFrom": 25000,
-      "image": "tortas-1.jpg"
+      "image": "tortas-1.jpg",
+      "size": "1/4 lb",
+      "productName": "Torta Yogurt",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 25000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1776731340908",
@@ -69,7 +135,15 @@
       "description": "La torta de dulce de fresa es una opción fresca, suave y llena de sabor frutal. Está elaborada con un bizcocho esponjoso que se combina con capas de dulce de fresa, aportando un equilibrio perfecto entre dulzura y un ligero toque ácido que la hace irresistible.",
       "price": 50000,
       "priceFrom": 50000,
-      "image": "tortas-4.jpg"
+      "image": "tortas-4.jpg",
+      "size": "1/2 lb",
+      "productName": "Torta leche con Dulce Fresas",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 50000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1776731725328",
@@ -79,57 +153,105 @@
       "description": "La torta de dulce de fresa es una opción fresca, suave y llena de sabor frutal. Está elaborada con un bizcocho esponjoso que se combina con capas de dulce de fresa, aportando un equilibrio perfecto entre dulzura y un ligero toque ácido que la hace irresistible.",
       "price": 30000,
       "priceFrom": 30000,
-      "image": "tortas-4.jpg"
+      "image": "tortas-4.jpg",
+      "size": "1/4 lb",
+      "productName": "Torta de leche con dulce de fresas",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 30000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1777138637960",
       "category": "Tortas",
-      "name": "1/4 lb Torta vainilla Brownie",
+      "name": "1/4 lb Torta Vainilla Brownie",
       "shortDescription": "La torta de vainilla con trozos de brownie es una combinación pensada para quien",
       "description": "La torta de vainilla con trozos de brownie es una combinación pensada para quienes no se conforman con un solo sabor. Parte de un bizcocho de vainilla suave y esponjoso, que se mezcla con generosos trozos de brownie, aportando intensidad, humedad y un toque profundo de chocolate en cada bocado.",
       "price": 25000,
       "priceFrom": 25000,
-      "image": "vb.jpeg"
+      "image": "vb.jpeg",
+      "size": "1/4 lb",
+      "productName": "Torta Vainilla Brownie",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 25000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1777138986299",
       "category": "Tortas",
-      "name": "1/2 lb torta  Vainilla Brownie",
+      "name": "1/2 lb Torta Vainilla Brownie",
       "shortDescription": "La torta de vainilla con trozos de brownie es una combinación pensada para quien",
       "description": "La torta de vainilla con trozos de brownie es una combinación pensada para quienes no se conforman con un solo sabor. Parte de un bizcocho de vainilla suave y esponjoso, que se mezcla con generosos trozos de brownie, aportando intensidad, humedad y un toque profundo de chocolate en cada bocado.",
       "price": 45000,
       "priceFrom": 45000,
-      "image": "vb.jpeg"
+      "image": "vb.jpeg",
+      "size": "1/2 lb",
+      "productName": "Torta Vainilla Brownie",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 45000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1777596718075",
       "category": "Tortas frías",
-      "name": "1/2 lb pionono",
+      "name": "1/2 lb Pionono",
       "shortDescription": "La torta fría de pionono es una opción suave, cremosa y muy agradable al paladar",
       "description": "La torta fría de pionono es una opción suave, cremosa y muy agradable al paladar. Se elabora con capas de bizcocho tipo pionono, ligeras y esponjosas, que se combinan con una delicada crema inglesa, aportando una textura sedosa y un sabor fino.",
       "price": 45000,
       "priceFrom": 45000,
-      "image": "pionono.jpg"
+      "image": "pionono.jpg",
+      "size": "1/2 lb",
+      "productName": "Pionono",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 45000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1777596946405",
       "category": "Tortas frías",
-      "name": "1/4 Pionono",
+      "name": "1/4 lb Pionono",
       "shortDescription": "La torta fría de pionono es una opción suave, cremosa y muy agradable al paladar",
       "description": "La torta fría de pionono es una opción suave, cremosa y muy agradable al paladar. Se elabora con capas de bizcocho tipo pionono, ligeras y esponjosas, que se combinan con una delicada crema inglesa, aportando una textura sedosa y un sabor fino.",
       "price": 25000,
       "priceFrom": 25000,
-      "image": "pionono.jpg"
+      "image": "pionono.jpg",
+      "size": "1/4 lb",
+      "productName": "Pionono",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 25000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1777597249741",
       "category": "Tortas frías",
-      "name": "1/4 lb pionono baileys",
+      "name": "1/4 lb Pionono Baileys",
       "shortDescription": "El pionono Baileys es una versión más indulgente y sofisticada del clásico piono",
       "description": "El pionono Baileys es una versión más indulgente y sofisticada del clásico pionono. Mantiene su base de bizcocho suave y enrollado, combinado con una crema delicada y sedosa, pero con el toque distintivo del licor tipo Baileys que aporta un sabor cremoso, ligeramente dulce y con notas sutiles a café y cacao.",
       "price": 30000,
       "priceFrom": 30000,
-      "image": "BAILEYS.jpg"
+      "image": "BAILEYS.jpg",
+      "size": "1/4 lb",
+      "productName": "Pionono Baileys",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 30000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1777597465000",
@@ -139,47 +261,89 @@
       "description": "El pionono Baileys es una versión más indulgente y sofisticada del clásico pionono. Mantiene su base de bizcocho suave y enrollado, combinado con una crema delicada y sedosa, pero con el toque distintivo del licor tipo Baileys que aporta un sabor cremoso, ligeramente dulce y con notas sutiles a café y cacao.",
       "price": 55000,
       "priceFrom": 55000,
-      "image": "BAILEYS.jpg"
+      "image": "BAILEYS.jpg",
+      "size": "1/2 lb",
+      "productName": "Pionono Baileys",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 55000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1780953419463",
       "category": "Encargos especiales",
-      "name": "1 lb mikey mouse",
+      "name": "1 lb Mikey Mouse",
       "shortDescription": "Tortas Cilíndrica base Buttercream, accesorios en cartón",
       "description": "Tortas Cilíndrica base Buttercream, accesorios en cartón",
       "price": 98000,
       "priceFrom": 98000,
-      "image": "mikey.jpg"
+      "image": "mikey.jpg",
+      "size": "1 lb",
+      "productName": "Mikey Mouse",
+      "productType": "custom",
+      "pricing": {
+        "type": "custom",
+        "amount": 98000,
+        "currency": "COP",
+        "note": "Precio según diseño y complejidad"
+      }
     },
     {
       "id": "prod-1780954190622",
       "category": "Encargos especiales",
-      "name": "1 lb paw patrol",
+      "name": "1 lb Paw Patrol",
       "shortDescription": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "description": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "price": 105,
       "priceFrom": 105,
-      "image": "paw patrol.png"
+      "image": "paw patrol.png",
+      "size": "1 lb",
+      "productName": "Paw Patrol",
+      "productType": "custom",
+      "pricing": {
+        "type": "custom",
+        "amount": 105000,
+        "currency": "COP",
+        "note": "Precio según diseño y complejidad"
+      }
     },
     {
       "id": "prod-1780955451664",
       "category": "encargos especiales para niña",
-      "name": "1 lb masha",
+      "name": "1 lb Masha",
       "shortDescription": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "description": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "price": 98000,
       "priceFrom": 98000,
-      "image": "masha.png"
+      "image": "masha.png",
+      "size": "1 lb",
+      "productName": "Masha",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 98000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1780955859216",
       "category": "encargos especiales para niña",
-      "name": "1 lb princesa",
+      "name": "1 lb Princesa",
       "shortDescription": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "description": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "price": 98000,
       "priceFrom": 98000,
-      "image": "bella.png"
+      "image": "bella.png",
+      "size": "1 lb",
+      "productName": "Princesa",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 98000,
+        "currency": "COP"
+      }
     },
     {
       "id": "prod-1780956138121",
@@ -189,7 +353,15 @@
       "description": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "price": 98000,
       "priceFrom": 98000,
-      "image": "barbie.png"
+      "image": "barbie.png",
+      "size": "1 lb",
+      "productName": "Barbie",
+      "productType": "standard",
+      "pricing": {
+        "type": "fixed",
+        "amount": 98000,
+        "currency": "COP"
+      }
     }
   ]
 }
