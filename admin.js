@@ -1,12 +1,14 @@
 // admin.js - Versión FINAL con botón Exportar JSON (verificada)
 
 import { getAllProducts, addOrUpdateProduct, deleteProduct } from './db.js';
-import { getAllCategories, addCategory } from './categories-db.js';
+import { getAllCategories, getCategoryNames, addCategory } from './categories-db.js';
 import { getAllOffers, saveOffer, deleteOffer } from './offers-db.js';
+import { mergeProducts } from './catalog-utils.js';
 
 let products = [];
 let categories = [];
 let offers = [];
+let publishedCategories = [];
 
 // ==================== MOSTRAR / OCULTAR PANEL ====================
 window.showAdminPanel = async function() {
@@ -36,8 +38,7 @@ function renderCategoryOptions() {
   if (!select) return;
   select.innerHTML = '';
 
-  const defaultCats = ['Tortas', 'Tortas frías', 'Galletas', 'Postres', 'Encargos especiales'];
-  const allCats = [...new Set([...defaultCats, ...categories.map(c => c.name)])];
+  const allCats = getCategoryNames(products, [...publishedCategories, ...categories]);
 
   allCats.forEach(name => {
     const opt = document.createElement('option');
@@ -49,7 +50,21 @@ function renderCategoryOptions() {
 
 // ==================== PRODUCTOS ====================
 async function loadAdminFromStorage() {
-  products = await getAllProducts().catch(() => []);
+  const [catalog, localProducts] = await Promise.all([
+    loadPublishedCatalog(),
+    getAllProducts().catch(() => [])
+  ]);
+  publishedCategories = catalog?.categories || [];
+  products = mergeProducts(catalog?.products || [], localProducts);
+}
+
+async function loadPublishedCatalog() {
+  try {
+    const response = await fetch(`products-data.json?v=${Date.now()}`);
+    return response.ok ? await response.json() : null;
+  } catch (error) {
+    return null;
+  }
 }
 
 function loadAdminProducts() {
@@ -81,7 +96,7 @@ function fillAdminFields(idx) {
 
   document.getElementById("admin-name").value = p ? (p.name || "") : "";
   document.getElementById("admin-desc").value = p ? (p.description || p.shortDescription || "") : "";
-  document.getElementById("admin-price").value = p ? (p.priceFrom || p.price || "") : "";
+  document.getElementById("admin-price").value = p ? (p.pricing?.amount ?? p.priceFrom ?? p.price ?? "") : "";
   document.getElementById("admin-image").value = p ? (p.image || "") : "";
 
   const catSelect = document.getElementById("admin-category");
@@ -100,7 +115,8 @@ async function saveAdminProduct() {
   let image = document.getElementById("admin-image").value.trim();
   const fileInput = document.getElementById("admin-image-file");
   if (fileInput.files && fileInput.files[0]) {
-    image = await toBase64(fileInput.files[0]);
+    alert("La carga de archivos no está disponible: el sitio no tiene un servidor para almacenar imágenes. Usa una ruta publicada.");
+    return;
   }
 
   if (!name || !category) {
@@ -108,14 +124,31 @@ async function saveAdminProduct() {
     return;
   }
 
+  const existingProduct = idx === "new" ? {} : products[idx];
+  const isCustomCategory = category.startsWith('Encargos especiales');
+  const productType = isCustomCategory
+    ? 'custom'
+    : (existingProduct.productType || 'standard');
   const productData = {
+    ...existingProduct,
     id: idx === "new" ? `prod-${Date.now()}` : products[idx].id,
     category,
     name,
+    productName: existingProduct.productName || name,
+    size: existingProduct.size || null,
+    productType,
     shortDescription: desc.slice(0, 80),
     description: desc,
     price: price,
     priceFrom: price,
+    pricing: {
+      ...(existingProduct.pricing || {}),
+      type: productType === 'custom'
+        ? 'custom'
+        : (existingProduct.pricing?.type || 'fixed'),
+      amount: price,
+      currency: 'COP'
+    },
     image: image || "placeholder.jpg"
   };
 
@@ -153,7 +186,8 @@ async function exportProductsToJSON() {
     
     const data = {
       lastUpdated: new Date().toISOString(),
-      products: allProducts
+      categories: getExportCategories(),
+      products
     };
 
     const jsonString = JSON.stringify(data, null, 2);
@@ -170,6 +204,15 @@ async function exportProductsToJSON() {
     alert(`✅ Archivo products-data.json descargado correctamente.\n\nAhora súbelo a la raíz de tu repositorio en GitHub.`);
   } catch (e) {
     alert("Error al exportar: " + e.message);
+  }
+
+  function getExportCategories() {
+    const categoryNames = getCategoryNames(products, [...publishedCategories, ...categories]);
+    return categoryNames.map(name =>
+      publishedCategories.find(category => category.name === name)
+      || categories.find(category => category.name === name)
+      || { name }
+    );
   }
 }
 
@@ -242,16 +285,6 @@ async function handleDeleteOffer() {
   alert("Oferta eliminada");
   hideAdminPanel();
   setTimeout(() => location.reload(), 700);
-}
-
-// ==================== UTILIDADES ====================
-function toBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
 }
 
 function updateAdminImagePreview(src) {

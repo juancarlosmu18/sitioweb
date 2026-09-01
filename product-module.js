@@ -1,5 +1,6 @@
 // product-module.js
 import { getAllProducts } from './db.js';
+import { formatPrice, getPricing, mergeProducts } from './catalog-utils.js';
 
 // Carga el catálogo desde el JSON (misma fuente que products-module.js).
 // IndexedDB solo se usa como respaldo offline, nunca como fuente autoritativa.
@@ -21,10 +22,8 @@ async function initProductDetail() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
 
-  let products = await loadProductsFromJSON();
-  if (!products || products.length === 0) {
-    products = await getAllProducts();
-  }
+  const publishedProducts = await loadProductsFromJSON() || [];
+  const products = mergeProducts(publishedProducts, await getAllProducts());
   const product = products.find((p) => p.id === id);
 
   if (!product) {
@@ -38,7 +37,7 @@ async function initProductDetail() {
   }
 
   document.title = `${product.name} • Cocoa & Vainilla`;
-  const basePrice = product.priceFrom || product.price || 0;
+  const pricing = getPricing(product);
   
   // Construir mensaje de WhatsApp
   const phone = "573222391967"; 
@@ -52,7 +51,8 @@ async function initProductDetail() {
     <div class="product-detail-copy">
       <h1>${product.name}</h1>
       <p class="muted"><strong>Categoría:</strong> ${product.category}</p>
-      <p class="muted"><strong>Precio:</strong> $${basePrice.toLocaleString('es-CO')}</p>
+      <p class="muted"><strong>Precio:</strong> ${formatPrice(pricing)}</p>
+      ${pricing.note ? `<p class="muted">${pricing.note}</p>` : ''}
       <p>${product.description}</p>
       <a class="btn btn-primary" href="${waLink}" target="_blank">Pedir por WhatsApp</a>
     </div>

@@ -1,15 +1,15 @@
 // products-module.js - Versión OPTIMIZADA para muchas referencias
 
 import { getAllProducts, addOrUpdateProduct } from './db.js';
+import { formatPrice, getPricing, mergeProducts } from './catalog-utils.js';
 
 async function init() {
   console.log("🚀 Iniciando renderizado optimizado...");
 
-  let products = await loadProductsFromJSON();   // Prioridad al JSON
-
-  if (!products || products.length === 0) {
-    products = await getAllProducts();
-  }
+  const catalog = await loadProductsFromJSON();
+  const publishedProducts = catalog?.products || [];
+  const localProducts = await getAllProducts();
+  let products = mergeProducts(publishedProducts, localProducts);
 
   if (products.length === 0) {
     console.log("🌱 Sembrando iniciales...");
@@ -22,11 +22,11 @@ async function init() {
       { id: "encargo-especial", category: "Encargos especiales", name: "Torta Personalizada", shortDescription: "Según tu idea.", priceFrom: 35000, image: "encargos-1.jpg" }
     ];
     for (const p of initialProducts) await addOrUpdateProduct(p);
-    products = await getAllProducts();
+    products = mergeProducts(publishedProducts, await getAllProducts());
   }
 
   console.log(`Total productos: ${products.length}`);
-  renderOptimized(products);
+  renderOptimized(products, catalog?.categories || []);
 }
 
 // Cargar desde JSON (más rápido y actualizable vía GitHub)
@@ -35,13 +35,13 @@ async function loadProductsFromJSON() {
     const response = await fetch(`products-data.json?v=${Date.now()}`);
     if (!response.ok) return null;
     const data = await response.json();
-    return data.products || [];
+    return data;
   } catch (e) {
     return null;
   }
 }
 
-function renderOptimized(products) {
+function renderOptimized(products, categories) {
   const container = document.getElementById("dynamic-categories");
   if (!container) {
     console.error("No se encontró #dynamic-categories");
@@ -58,14 +58,10 @@ function renderOptimized(products) {
     grouped[cat].push(p);
   });
 
-  // Orden deseado
-  const order = ["Tortas", "Tortas frías", "Galletas", "Postres", "Encargos especiales"];
-
-  const sortedCategories = Object.keys(grouped).sort((a, b) => {
-    const ia = order.indexOf(a);
-    const ib = order.indexOf(b);
-    return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
-  });
+  const categoryOrder = new Map(categories.map((category, index) => [category.name, index]));
+  const sortedCategories = Object.keys(grouped).sort((a, b) =>
+    (categoryOrder.get(a) ?? Number.MAX_SAFE_INTEGER) - (categoryOrder.get(b) ?? Number.MAX_SAFE_INTEGER)
+  );
 
   const fragment = document.createDocumentFragment();
 
@@ -89,7 +85,7 @@ function renderOptimized(products) {
     const gridFragment = document.createDocumentFragment();
 
     prods.forEach(prod => {
-      const price = prod.priceFrom || prod.price || 0;
+      const price = getPricing(prod);
       const card = document.createElement('div');
       card.style.cssText = `
         background:#fff; 
@@ -107,7 +103,7 @@ function renderOptimized(products) {
           <div style="padding:16px;">
             <h3 style="margin:0 0 8px 0; font-size:19px;">${prod.name}</h3>
             <p style="margin:0 0 12px 0; color:#666; font-size:14px;">${prod.shortDescription || ''}</p>
-            <div style="font-weight:700; color:#2b1d16;">$${price.toLocaleString('es-CO')}</div>
+            <div style="font-weight:700; color:#2b1d16;">${formatPrice(price)}</div>
           </div>
         </a>
       `;
