@@ -16,3 +16,7 @@ export function formatPrice(pricing) {
     : '';
   return `${labels[pricing.type] || ''}${formattedAmount}`.trim() || 'Consultar precio';
 }
+
+export function mergeProducts(publishedProducts, localProducts) {
+  return [...new Map([...publishedProducts, ...localProducts].map(product => [product.id, product])).values()];
+}

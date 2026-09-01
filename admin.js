@@ -3,6 +3,7 @@
 import { getAllProducts, addOrUpdateProduct, deleteProduct } from './db.js';
 import { getAllCategories, getCategoryNames, addCategory } from './categories-db.js';
 import { getAllOffers, saveOffer, deleteOffer } from './offers-db.js';
+import { mergeProducts } from './catalog-utils.js';
 
 let products = [];
 let categories = [];
@@ -64,10 +65,6 @@ async function loadPublishedCatalog() {
   } catch (error) {
     return null;
   }
-}
-
-function mergeProducts(publishedProducts, localProducts) {
-  return [...new Map([...publishedProducts, ...localProducts].map(product => [product.id, product])).values()];
 }
 
 function loadAdminProducts() {
@@ -185,7 +182,7 @@ async function exportProductsToJSON() {
     
     const data = {
       lastUpdated: new Date().toISOString(),
-      categories: getCategoryNames(products, [...publishedCategories, ...categories]).map(name => ({ name })),
+      categories: getExportCategories(),
       products
     };
 
@@ -203,6 +200,15 @@ async function exportProductsToJSON() {
     alert(`✅ Archivo products-data.json descargado correctamente.\n\nAhora súbelo a la raíz de tu repositorio en GitHub.`);
   } catch (e) {
     alert("Error al exportar: " + e.message);
+  }
+
+  function getExportCategories() {
+    const categoryNames = getCategoryNames(products, [...publishedCategories, ...categories]);
+    return categoryNames.map(name =>
+      publishedCategories.find(category => category.name === name)
+      || categories.find(category => category.name === name)
+      || { name }
+    );
   }
 }
 

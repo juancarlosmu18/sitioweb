@@ -1,6 +1,6 @@
 // product-module.js
 import { getAllProducts } from './db.js';
-import { formatPrice, getPricing } from './catalog-utils.js';
+import { formatPrice, getPricing, mergeProducts } from './catalog-utils.js';
 
 // Carga el catálogo desde el JSON (misma fuente que products-module.js).
 // IndexedDB solo se usa como respaldo offline, nunca como fuente autoritativa.
@@ -57,10 +57,6 @@ async function initProductDetail() {
       <a class="btn btn-primary" href="${waLink}" target="_blank">Pedir por WhatsApp</a>
     </div>
   `;
-}
-
-function mergeProducts(publishedProducts, localProducts) {
-  return [...new Map([...publishedProducts, ...localProducts].map(product => [product.id, product])).values()];
 }
 
 if (document.readyState === 'loading') {

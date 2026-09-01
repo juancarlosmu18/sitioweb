@@ -1,7 +1,7 @@
 // products-module.js - Versión OPTIMIZADA para muchas referencias
 
 import { getAllProducts, addOrUpdateProduct } from './db.js';
-import { formatPrice, getPricing } from './catalog-utils.js';
+import { formatPrice, getPricing, mergeProducts } from './catalog-utils.js';
 
 async function init() {
   console.log("🚀 Iniciando renderizado optimizado...");
@@ -27,10 +27,6 @@ async function init() {
 
   console.log(`Total productos: ${products.length}`);
   renderOptimized(products, catalog?.categories || []);
-}
-
-function mergeProducts(publishedProducts, localProducts) {
-  return [...new Map([...publishedProducts, ...localProducts].map(product => [product.id, product])).values()];
 }
 
 // Cargar desde JSON (más rápido y actualizable vía GitHub)
