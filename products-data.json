@@ -33,7 +33,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 45000,
+        "amount": 48000,
         "currency": "COP"
       }
     },
@@ -51,7 +51,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 25000,
+        "amount": 28000,
         "currency": "COP"
       }
     },
@@ -69,7 +69,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 45000,
+        "amount": 48000,
         "currency": "COP"
       }
     },
@@ -87,7 +87,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 25000,
+        "amount": 28000,
         "currency": "COP"
       }
     },
@@ -105,7 +105,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 45000,
+        "amount": 48000,
         "currency": "COP"
       }
     },
@@ -123,7 +123,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 25000,
+        "amount": 28000,
         "currency": "COP"
       }
     },
@@ -141,7 +141,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 50000,
+        "amount": 48000,
         "currency": "COP"
       }
     },
@@ -159,7 +159,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 30000,
+        "amount": 28000,
         "currency": "COP"
       }
     },
@@ -177,7 +177,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 25000,
+        "amount": 28000,
         "currency": "COP"
       }
     },
@@ -195,7 +195,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 45000,
+        "amount": 48000,
         "currency": "COP"
       }
     },
@@ -296,8 +296,8 @@
       "name": "1 lb Paw Patrol",
       "shortDescription": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "description": "Tortas Cilindricas base Buttercream, accesorios en cartón",
-      "price": 105,
-      "priceFrom": 105,
+      "price": 105000,
+      "priceFrom": 105000,
       "image": "paw patrol.png",
       "size": "1 lb",
       "productName": "Paw Patrol",
@@ -306,7 +306,7 @@
         "type": "custom",
         "amount": 105000,
         "currency": "COP",
-        "note": "Precio según diseño y complejidad"
+        "note": "Precio de referencia; varía según diseño y complejidad"
       }
     },
     {

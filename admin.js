@@ -7,6 +7,7 @@ import { getAllOffers, saveOffer, deleteOffer } from './offers-db.js';
 let products = [];
 let categories = [];
 let offers = [];
+let publishedCategories = [];
 
 // ==================== MOSTRAR / OCULTAR PANEL ====================
 window.showAdminPanel = async function() {
@@ -36,7 +37,7 @@ function renderCategoryOptions() {
   if (!select) return;
   select.innerHTML = '';
 
-  const allCats = getCategoryNames(products, categories);
+  const allCats = getCategoryNames(products, [...publishedCategories, ...categories]);
 
   allCats.forEach(name => {
     const opt = document.createElement('option');
@@ -48,7 +49,25 @@ function renderCategoryOptions() {
 
 // ==================== PRODUCTOS ====================
 async function loadAdminFromStorage() {
-  products = await getAllProducts().catch(() => []);
+  const [catalog, localProducts] = await Promise.all([
+    loadPublishedCatalog(),
+    getAllProducts().catch(() => [])
+  ]);
+  publishedCategories = catalog?.categories || [];
+  products = mergeProducts(catalog?.products || [], localProducts);
+}
+
+async function loadPublishedCatalog() {
+  try {
+    const response = await fetch(`products-data.json?v=${Date.now()}`);
+    return response.ok ? await response.json() : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function mergeProducts(publishedProducts, localProducts) {
+  return [...new Map([...publishedProducts, ...localProducts].map(product => [product.id, product])).values()];
 }
 
 function loadAdminProducts() {
@@ -166,7 +185,8 @@ async function exportProductsToJSON() {
     
     const data = {
       lastUpdated: new Date().toISOString(),
-      products: allProducts
+      categories: getCategoryNames(products, [...publishedCategories, ...categories]).map(name => ({ name })),
+      products
     };
 
     const jsonString = JSON.stringify(data, null, 2);
@@ -255,16 +275,6 @@ async function handleDeleteOffer() {
   alert("Oferta eliminada");
   hideAdminPanel();
   setTimeout(() => location.reload(), 700);
-}
-
-// ==================== UTILIDADES ====================
-function toBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  });
 }
 
 function updateAdminImagePreview(src) {

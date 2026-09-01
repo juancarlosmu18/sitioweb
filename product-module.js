@@ -22,10 +22,8 @@ async function initProductDetail() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
 
-  let products = await loadProductsFromJSON();
-  if (!products || products.length === 0) {
-    products = await getAllProducts();
-  }
+  const publishedProducts = await loadProductsFromJSON() || [];
+  const products = mergeProducts(publishedProducts, await getAllProducts());
   const product = products.find((p) => p.id === id);
 
   if (!product) {
@@ -59,6 +57,10 @@ async function initProductDetail() {
       <a class="btn btn-primary" href="${waLink}" target="_blank">Pedir por WhatsApp</a>
     </div>
   `;
+}
+
+function mergeProducts(publishedProducts, localProducts) {
+  return [...new Map([...publishedProducts, ...localProducts].map(product => [product.id, product])).values()];
 }
 
 if (document.readyState === 'loading') {

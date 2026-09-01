@@ -7,11 +7,9 @@ async function init() {
   console.log("🚀 Iniciando renderizado optimizado...");
 
   const catalog = await loadProductsFromJSON();
-  let products = catalog?.products;   // Prioridad al JSON
-
-  if (!products || products.length === 0) {
-    products = await getAllProducts();
-  }
+  const publishedProducts = catalog?.products || [];
+  const localProducts = await getAllProducts();
+  let products = mergeProducts(publishedProducts, localProducts);
 
   if (products.length === 0) {
     console.log("🌱 Sembrando iniciales...");
@@ -24,11 +22,15 @@ async function init() {
       { id: "encargo-especial", category: "Encargos especiales", name: "Torta Personalizada", shortDescription: "Según tu idea.", priceFrom: 35000, image: "encargos-1.jpg" }
     ];
     for (const p of initialProducts) await addOrUpdateProduct(p);
-    products = await getAllProducts();
+    products = mergeProducts(publishedProducts, await getAllProducts());
   }
 
   console.log(`Total productos: ${products.length}`);
   renderOptimized(products, catalog?.categories || []);
+}
+
+function mergeProducts(publishedProducts, localProducts) {
+  return [...new Map([...publishedProducts, ...localProducts].map(product => [product.id, product])).values()];
 }
 
 // Cargar desde JSON (más rápido y actualizable vía GitHub)
