@@ -6,7 +6,7 @@ import sys
 
 def main() -> int:
     root = os.path.dirname(os.path.abspath(__file__))
-    src = os.path.join(root, "assets", "logo.jpg")
+    src = os.path.join(root, "logo.jpg")
 
     if not os.path.exists(src):
         print(f"ERROR: No encuentro el archivo: {src}")
@@ -43,6 +43,7 @@ def main() -> int:
     save_png(32, "favicon-32x32.png")
     save_png(180, "apple-touch-icon.png")
     save_png(192, "android-chrome-192x192.png")
+    save_png(512, "icon-512.png")
 
     ico_sizes = [(16, 16), (32, 32), (48, 48)]
     ico_base = img.resize((48, 48), Image.Resampling.LANCZOS)

@@ -1,6 +1,6 @@
 // sw.js - Service Worker simplificado y actualizado
 
-const CACHE_NAME = 'cv-pwa-v4'; // Súbele la versión
+const CACHE_NAME = 'cv-pwa-v5'; // Súbele la versión
 
 const ASSETS = [
   '/',
@@ -15,10 +15,15 @@ const ASSETS = [
   '/manifest.json',
   '/favicon.ico',
   '/favicon-32x32.png',
-  '/apple-touch-icon.png'
+  '/apple-touch-icon.png',
   '/ofertas.html',
   '/offers.js',
   '/offers-db.js',
+  '/db.js',
+  '/product-module.js',
+  '/product.html',
+  '/android-chrome-192x192.png',
+  '/icon-512.png',
 ];
 
 // Instalación: cachear solo archivos esenciales y forzar actualización
