@@ -109,6 +109,8 @@ async function saveAdminProduct() {
   }
 
   const existingProduct = idx === "new" ? {} : products[idx];
+  const productType = existingProduct.productType
+    || (category.startsWith('Encargos especiales') ? 'custom' : 'standard');
   const productData = {
     ...existingProduct,
     id: idx === "new" ? `prod-${Date.now()}` : products[idx].id,
@@ -116,14 +118,14 @@ async function saveAdminProduct() {
     name,
     productName: existingProduct.productName || name,
     size: existingProduct.size || null,
-    productType: existingProduct.productType || 'standard',
+    productType,
     shortDescription: desc.slice(0, 80),
     description: desc,
     price: price,
     priceFrom: price,
     pricing: {
       ...(existingProduct.pricing || {}),
-      type: existingProduct.pricing?.type || (existingProduct.productType === 'custom' ? 'custom' : 'fixed'),
+      type: existingProduct.pricing?.type || (productType === 'custom' ? 'custom' : 'fixed'),
       amount: price,
       currency: 'COP'
     },
