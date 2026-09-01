@@ -274,14 +274,14 @@
     {
       "id": "prod-1780953419463",
       "category": "Encargos especiales",
-      "name": "1 lb Mikey Mouse",
+      "name": "1 lb Mickey Mouse",
       "shortDescription": "Tortas Cilíndrica base Buttercream, accesorios en cartón",
       "description": "Tortas Cilíndrica base Buttercream, accesorios en cartón",
       "price": 98000,
       "priceFrom": 98000,
       "image": "mikey.jpg",
       "size": "1 lb",
-      "productName": "Mikey Mouse",
+      "productName": "Mickey Mouse",
       "productType": "custom",
       "pricing": {
         "type": "custom",
