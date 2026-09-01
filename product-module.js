@@ -1,13 +1,30 @@
 // product-module.js
 import { getAllProducts } from './db.js';
 
+// Carga el catálogo desde el JSON (misma fuente que products-module.js).
+// IndexedDB solo se usa como respaldo offline, nunca como fuente autoritativa.
+async function loadProductsFromJSON() {
+  try {
+    const response = await fetch(`products-data.json?v=${Date.now()}`);
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data.products || [];
+  } catch (e) {
+    return null;
+  }
+}
+
 async function initProductDetail() {
   const host = document.querySelector('[data-product-detail]');
   if (!host) return;
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
-  const products = await getAllProducts();
+
+  let products = await loadProductsFromJSON();
+  if (!products || products.length === 0) {
+    products = await getAllProducts();
+  }
   const product = products.find((p) => p.id === id);
 
   if (!product) {

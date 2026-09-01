@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Reemplazá BASE_URL por tu dominio cuando publiques (ej: https://cocoayvainilla.com) -->
+  <!-- Dominio configurado vía CNAME: reposteriacocoayvainilla.co -->
   <url>
-    <loc>BASE_URL/</loc>
+    <loc>https://reposteriacocoayvainilla.co/</loc>
   </url>
   <url>
-    <loc>BASE_URL/index.html</loc>
+    <loc>https://reposteriacocoayvainilla.co/index.html</loc>
   </url>
   <url>
-    <loc>BASE_URL/products.html</loc>
+    <loc>https://reposteriacocoayvainilla.co/products.html</loc>
   </url>
   <url>
-    <loc>BASE_URL/about.html</loc>
+    <loc>https://reposteriacocoayvainilla.co/ofertas.html</loc>
   </url>
   <url>
-    <loc>BASE_URL/contact.html</loc>
+    <loc>https://reposteriacocoayvainilla.co/about.html</loc>
   </url>
   <url>
-    <loc>BASE_URL/product.html</loc>
+    <loc>https://reposteriacocoayvainilla.co/contact.html</loc>
+  </url>
+  <url>
+    <loc>https://reposteriacocoayvainilla.co/product.html</loc>
   </url>
 </urlset>

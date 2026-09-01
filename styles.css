@@ -825,6 +825,11 @@ button:focus-visible {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.offer-card:hover {
+  transform: translateY(-5px);
 }
 
 .offer-img {
@@ -850,12 +855,4 @@ button:focus-visible {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
   margin-top: 20px;
-}
-
-.offer-card {
-  transition: transform 0.2s ease;
-}
-
-.offer-card:hover {
-  transform: translateY(-5px);
 }

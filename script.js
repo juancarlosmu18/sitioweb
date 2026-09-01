@@ -7,27 +7,18 @@ if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
   });
 }
 // ==================== CONTADOR DE VISITAS ====================
-// Comentado temporalmente porque la API da error (nombre incorrecto)
-function initVisitCounter() {
-  const el = document.querySelector('[data-visit-count]');
-  if (!el) return;
-  
-  // Mostramos un valor por defecto mientras arreglamos
-  el.textContent = "—";
-  console.log("Contador de visitas desactivado temporalmente");
-}
-
-// Si quieres dejarla pero corregida, usa esta versión:
+// Deshabilitado temporalmente: no se invoca desde main() (ver más abajo)
+// mientras no se defina un backend propio para el conteo de visitas.
 async function initVisitCounter() {
   const el = document.querySelector('[data-visit-count]');
   if (!el) return;
-  
+
   try {
     const resp = await fetch('https://api.countapi.xyz/hit/cocoayvainilla/visitas', {
       method: 'GET',
       signal: AbortSignal.timeout(4000)
     });
-    
+
     if (resp.ok) {
       const data = await resp.json();
       el.textContent = data.value || "0";
@@ -54,26 +45,7 @@ function initWhatsAppLinks() {
 function buildWhatsAppLink(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
-// Renderiza una tarjeta de producto para el catálogo
-function renderProductCard(product) {
-  return `
-    <div class="product-card">
-      <a href="product.html?id=${encodeURIComponent(product.id)}" class="product-card-link">
-        <img src="${product.image}" alt="${escapeHtml(product.name)}" class="product-card-img" />
-        <div class="product-card-body">
-          <h3 class="product-card-title">${escapeHtml(product.name)}</h3>
-          <p class="product-card-desc">${escapeHtml(product.shortDescription)}</p>
-          <p class="product-card-price">${product.priceFrom ? formatPriceARS(product.priceFrom) : (product.price ? formatPriceARS(product.price) : "")}</p>
-        </div>
-      </a>
-    </div>
-  `;
-}
 
-// Formatea el precio en pesos colombianos
-function formatPriceARS(price) {
-  return "$ " + price.toLocaleString("es-CO");
-}
 /*
   Cocoa & Vainilla — JS básico
   - Menú móvil
@@ -113,16 +85,6 @@ function initFadeIn() {
 
   items.forEach((el) => io.observe(el));
 }
-
-function escapeHtml(input) {
-  return String(input)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
 
 // Menú móvil: abre/cierra el menú en móviles
 function initMobileNav() {
