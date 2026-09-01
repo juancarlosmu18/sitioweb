@@ -1,6 +1,6 @@
 export function getPricing(product) {
   return product.pricing || {
-    type: product.priceFrom != null && product.price != null && product.priceFrom !== product.price
+    type: product.priceFrom != null && (product.price == null || product.priceFrom !== product.price)
       ? 'from'
       : 'fixed',
     amount: product.priceFrom ?? product.price ?? 0,
