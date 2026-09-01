@@ -311,7 +311,7 @@
     },
     {
       "id": "prod-1780955451664",
-      "category": "encargos especiales para niña",
+      "category": "Encargos especiales para niña",
       "name": "1 lb Masha",
       "shortDescription": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "description": "Tortas Cilindricas base Buttercream, accesorios en cartón",
@@ -320,16 +320,16 @@
       "image": "masha.png",
       "size": "1 lb",
       "productName": "Masha",
-      "productType": "standard",
+      "productType": "custom",
       "pricing": {
-        "type": "fixed",
+        "type": "custom",
         "amount": 98000,
         "currency": "COP"
       }
     },
     {
       "id": "prod-1780955859216",
-      "category": "encargos especiales para niña",
+      "category": "Encargos especiales para niña",
       "name": "1 lb Princesa",
       "shortDescription": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "description": "Tortas Cilindricas base Buttercream, accesorios en cartón",
@@ -338,16 +338,16 @@
       "image": "bella.png",
       "size": "1 lb",
       "productName": "Princesa",
-      "productType": "standard",
+      "productType": "custom",
       "pricing": {
-        "type": "fixed",
+        "type": "custom",
         "amount": 98000,
         "currency": "COP"
       }
     },
     {
       "id": "prod-1780956138121",
-      "category": "encargos especiales para niña",
+      "category": "Encargos especiales para niña",
       "name": "1 lb Barbie",
       "shortDescription": "Tortas Cilindricas base Buttercream, accesorios en cartón",
       "description": "Tortas Cilindricas base Buttercream, accesorios en cartón",
@@ -356,9 +356,9 @@
       "image": "barbie.png",
       "size": "1 lb",
       "productName": "Barbie",
-      "productType": "standard",
+      "productType": "custom",
       "pricing": {
-        "type": "fixed",
+        "type": "custom",
         "amount": 98000,
         "currency": "COP"
       }
