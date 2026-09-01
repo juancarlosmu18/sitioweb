@@ -123,7 +123,7 @@ async function saveAdminProduct() {
     priceFrom: price,
     pricing: {
       ...(existingProduct.pricing || {}),
-      type: existingProduct.productType === 'custom' ? 'custom' : 'fixed',
+      type: existingProduct.pricing?.type || (existingProduct.productType === 'custom' ? 'custom' : 'fixed'),
       amount: price,
       currency: 'COP'
     },

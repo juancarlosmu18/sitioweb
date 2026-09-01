@@ -1,11 +1,13 @@
 // products-module.js - Versión OPTIMIZADA para muchas referencias
 
 import { getAllProducts, addOrUpdateProduct } from './db.js';
+import { formatPrice, getPricing } from './catalog-utils.js';
 
 async function init() {
   console.log("🚀 Iniciando renderizado optimizado...");
 
-  let products = await loadProductsFromJSON();   // Prioridad al JSON
+  const catalog = await loadProductsFromJSON();
+  let products = catalog?.products;   // Prioridad al JSON
 
   if (!products || products.length === 0) {
     products = await getAllProducts();
@@ -26,7 +28,7 @@ async function init() {
   }
 
   console.log(`Total productos: ${products.length}`);
-  renderOptimized(products);
+  renderOptimized(products, catalog?.categories || []);
 }
 
 // Cargar desde JSON (más rápido y actualizable vía GitHub)
@@ -35,13 +37,13 @@ async function loadProductsFromJSON() {
     const response = await fetch(`products-data.json?v=${Date.now()}`);
     if (!response.ok) return null;
     const data = await response.json();
-    return data.products || [];
+    return data;
   } catch (e) {
     return null;
   }
 }
 
-function renderOptimized(products) {
+function renderOptimized(products, categories) {
   const container = document.getElementById("dynamic-categories");
   if (!container) {
     console.error("No se encontró #dynamic-categories");
@@ -58,7 +60,10 @@ function renderOptimized(products) {
     grouped[cat].push(p);
   });
 
-  const sortedCategories = Object.keys(grouped);
+  const categoryOrder = new Map(categories.map((category, index) => [category.name, index]));
+  const sortedCategories = Object.keys(grouped).sort((a, b) =>
+    (categoryOrder.get(a) ?? Number.MAX_SAFE_INTEGER) - (categoryOrder.get(b) ?? Number.MAX_SAFE_INTEGER)
+  );
 
   const fragment = document.createDocumentFragment();
 
@@ -113,23 +118,6 @@ function renderOptimized(products) {
 
   container.appendChild(fragment);
   console.log(`✅ Renderizadas ${sortedCategories.length} categorías de forma optimizada`);
-}
-
-function getPricing(product) {
-  return product.pricing || {
-    type: product.priceFrom ? 'from' : 'fixed',
-    amount: product.priceFrom ?? product.price ?? 0,
-    currency: 'COP'
-  };
-}
-
-function formatPrice(pricing) {
-  const labels = { from: 'Desde ', variable: 'Precio variable', quote: 'Cotizar' };
-  const amount = Number(pricing.amount);
-  const formattedAmount = Number.isFinite(amount) && amount > 0
-    ? `$${amount.toLocaleString('es-CO')}`
-    : '';
-  return `${labels[pricing.type] || ''}${formattedAmount}`.trim() || 'Consultar precio';
 }
 
 // Iniciar
