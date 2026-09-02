@@ -1,6 +1,6 @@
 // sw.js - Service Worker simplificado y actualizado
 
-const CACHE_NAME = 'cv-pwa-v5'; // Súbele la versión
+const CACHE_NAME = 'cv-pwa-v6'; // Súbele la versión
 
 const ASSETS = [
   '/',
