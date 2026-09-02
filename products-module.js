@@ -1,29 +1,12 @@
 // products-module.js - Versión OPTIMIZADA para muchas referencias
 
-import { getAllProducts, addOrUpdateProduct } from './db.js';
-import { formatPrice, getPricing, mergeProducts } from './catalog-utils.js';
+import { formatPrice, getPricing } from './catalog-utils.js';
 
 async function init() {
   console.log("🚀 Iniciando renderizado optimizado...");
 
   const catalog = await loadProductsFromJSON();
-  const publishedProducts = catalog?.products || [];
-  const localProducts = await getAllProducts();
-  let products = mergeProducts(publishedProducts, localProducts);
-
-  if (products.length === 0) {
-    console.log("🌱 Sembrando iniciales...");
-    const initialProducts = [
-      { id: "torta-vainilla", category: "Tortas", name: "Torta de Vainilla", shortDescription: "Clásica y suave.", priceFrom: 25000, image: "tortas-1.jpg" },
-      { id: "torta-chocolate", category: "Tortas", name: "Torta de Chocolate", shortDescription: "Intensa y húmeda.", priceFrom: 25000, image: "tortas-2.jpg" },
-      { id: "pionono", category: "Tortas frías", name: "1/2 lb pionono", shortDescription: "Suave, cremosa y perfecta para servir fría.", priceFrom: 45000, image: "pionono.jpg" },
-      { id: "galletas-manteca", category: "Galletas", name: "Galletas de Manteca", shortDescription: "Clásicas y crocantes.", price: 6500, image: "galletas-1.jpg" },
-      { id: "postre-choco", category: "Postres", name: "Postre de Chocolate", shortDescription: "Delicioso y cremoso.", price: 12000, image: "postres-1.jpg" },
-      { id: "encargo-especial", category: "Encargos especiales", name: "Torta Personalizada", shortDescription: "Según tu idea.", priceFrom: 35000, image: "encargos-1.jpg" }
-    ];
-    for (const p of initialProducts) await addOrUpdateProduct(p);
-    products = mergeProducts(publishedProducts, await getAllProducts());
-  }
+  const products = catalog?.products || [];
 
   console.log(`Total productos: ${products.length}`);
   renderOptimized(products, catalog?.categories || []);
