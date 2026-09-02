@@ -140,33 +140,23 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ====================== ATAJO GLOBAL ADMIN ======================
-// Funciona en TODAS las páginas: index, products, about, contact, etc.
+// El administrador SOLO existe en index.html. Cualquier otra página
+// (productos, producto, ofertas, contacto, sobre nosotros, etc.) no debe
+// abrir ni cargar ningún panel administrativo.
+
+function isAdminAllowedPage() {
+  const path = window.location.pathname.toLowerCase();
+  return path === "/" || path.endsWith("/index.html") || path.endsWith("/index.htm");
+}
 
 window.addEventListener("keydown", (e) => {
   if (e.ctrlKey && e.altKey && (e.key === "a" || e.key === "A")) {
+    if (!isAdminAllowedPage()) return;
+
     e.preventDefault();
 
-    // Intenta abrir el panel de forma segura
     if (typeof window.showAdminPanel === "function") {
       window.showAdminPanel();
-    } 
-    else {
-      // Fallback: si admin.js no cargó la función, abrimos el panel manualmente
-      const panel = document.getElementById("admin-panel");
-      if (panel) {
-        panel.style.display = "flex";
-        console.log("Panel abierto manualmente (fallback)");
-        
-        // Intentamos cargar admin.js dinámicamente si es necesario
-        if (!document.querySelector('script[src="admin.js"]')) {
-          const script = document.createElement("script");
-          script.src = "admin.js";
-          script.type = "module";   // importante porque admin.js usa import
-          document.body.appendChild(script);
-        }
-      } else {
-        alert("No se encontró el panel de administración en esta página.");
-      }
     }
   }
 });
