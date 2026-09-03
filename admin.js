@@ -217,8 +217,23 @@ async function exportProductsToJSON() {
 }
 
 // ==================== OFERTAS ====================
+// Normaliza una oferta almacenada localmente al modelo público:
+// { id, title, description, image, publishedAt }
+// Migra registros antiguos (date -> publishedAt, note -> description como respaldo)
+// sin eliminar los datos originales de IndexedDB.
+function normalizeOffer(o) {
+  return {
+    id: o.id,
+    title: o.title || "",
+    description: o.description || o.note || "",
+    image: o.image || "",
+    publishedAt: o.publishedAt || o.date || new Date().toISOString()
+  };
+}
+
 async function loadAdminOffers() {
-  offers = await getAllOffers().catch(() => []);
+  const rawOffers = await getAllOffers().catch(() => []);
+  offers = rawOffers.map(normalizeOffer);
   const select = document.getElementById("admin-offer-select");
   if (!select) return;
 
@@ -243,9 +258,12 @@ function fillOfferFields(idx) {
   const deleteBtn = document.getElementById("admin-offer-delete");
   if (deleteBtn) deleteBtn.style.display = (idx === "new") ? "none" : "block";
 
+  const imageInput = document.getElementById("admin-offer-image");
+
   if (idx === "new") {
     document.getElementById("admin-offer-title").value = "";
     document.getElementById("admin-offer-desc").value = "";
+    if (imageInput) imageInput.value = "";
     return;
   }
 
@@ -253,6 +271,7 @@ function fillOfferFields(idx) {
   if (o) {
     document.getElementById("admin-offer-title").value = o.title || "";
     document.getElementById("admin-offer-desc").value = o.description || "";
+    if (imageInput) imageInput.value = o.image || "";
   }
 }
 
@@ -260,6 +279,8 @@ async function handleSaveOffer() {
   const idx = document.getElementById("admin-offer-select").value;
   const title = document.getElementById("admin-offer-title").value.trim();
   const description = document.getElementById("admin-offer-desc").value.trim();
+  const imageInput = document.getElementById("admin-offer-image");
+  const image = imageInput ? imageInput.value.trim() : "";
 
   if (!title) return alert("El título es obligatorio");
 
@@ -267,13 +288,39 @@ async function handleSaveOffer() {
     id: idx === "new" ? `off-${Date.now()}` : offers[idx].id,
     title,
     description,
-    date: new Date().toISOString()
+    image,
+    publishedAt: new Date().toISOString()
   };
 
   await saveOffer(offerData);
   alert("✅ Oferta guardada");
   hideAdminPanel();
   setTimeout(() => location.reload(), 700);
+}
+
+// ==================== BOTÓN EXPORTAR OFERTAS JSON ====================
+async function exportOffersToJSON() {
+  try {
+    const rawOffers = await getAllOffers();
+    const normalizedOffers = rawOffers.map(normalizeOffer);
+
+    const data = { offers: normalizedOffers };
+
+    const jsonString = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'offers-data.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    alert(`✅ Archivo offers-data.json descargado correctamente.\n\nAhora súbelo a la raíz de tu repositorio en GitHub.`);
+  } catch (e) {
+    alert("Error al exportar ofertas: " + e.message);
+  }
 }
 
 async function handleDeleteOffer() {
@@ -325,6 +372,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (offerSaveBtn) offerSaveBtn.addEventListener("click", handleSaveOffer);
     if (offerDeleteBtn) offerDeleteBtn.addEventListener("click", handleDeleteOffer);
 
+    // Campo de imagen de la oferta (agregado dinámicamente, ruta/URL relativa,
+    // nunca base64) justo antes de los botones Guardar/Eliminar oferta.
+    if (!document.getElementById("admin-offer-image") && offerSaveBtn) {
+      const offerImageInput = document.createElement("input");
+      offerImageInput.id = "admin-offer-image";
+      offerImageInput.placeholder = "Ruta de imagen (ej: placeholder.jpg)";
+      offerImageInput.style.cssText = "width:100%; margin-bottom:10px; padding:10px;";
+      const offerButtonsRow = offerSaveBtn.parentElement;
+      if (offerButtonsRow) {
+        offerButtonsRow.parentElement.insertBefore(offerImageInput, offerButtonsRow);
+      }
+    }
+
     // ==================== BOTÓN EXPORTAR JSON ====================
     const exportBtn = document.createElement("button");
     exportBtn.textContent = "📤 Exportar productos a JSON";
@@ -342,9 +402,26 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     exportBtn.onclick = exportProductsToJSON;
 
+    const exportOffersBtn = document.createElement("button");
+    exportOffersBtn.textContent = "📤 Exportar ofertas a JSON";
+    exportOffersBtn.style.cssText = `
+      width:100%; 
+      padding:14px; 
+      margin-top:10px; 
+      background:#4CAF50; 
+      color:white; 
+      border:none; 
+      border-radius:8px; 
+      font-weight:bold; 
+      cursor:pointer;
+      font-size:16px;
+    `;
+    exportOffersBtn.onclick = exportOffersToJSON;
+
     const panelContent = document.querySelector("#admin-panel > div");
     if (panelContent) {
       panelContent.appendChild(exportBtn);
+      panelContent.appendChild(exportOffersBtn);
     }
 
     console.log("✅ Admin.js inicializado correctamente con botón Exportar");
