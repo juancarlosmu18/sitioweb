@@ -331,6 +331,30 @@ async function handleSaveOffer() {
   setTimeout(() => location.reload(), 700);
 }
 
+// Valida que la estructura final a exportar sea realmente { offers: [...] }
+// con los campos mínimos requeridos y datos serializables, antes de generar
+// el archivo de descarga. Evita descargar un JSON aparentemente correcto
+// pero corrupto (por ejemplo, con valores no serializables o registros
+// incompletos que offers.js terminaría rechazando).
+function validateExportedOffersData(data) {
+  if (!data || !Array.isArray(data.offers)) return false;
+
+  let roundTrip;
+  try {
+    roundTrip = JSON.parse(JSON.stringify(data));
+  } catch (e) {
+    return false; // contiene valores no serializables (funciones, undefined circular, etc.)
+  }
+  if (!Array.isArray(roundTrip.offers)) return false;
+
+  return roundTrip.offers.every(o =>
+    o && typeof o === 'object' &&
+    typeof o.id === 'string' && o.id.trim() !== '' &&
+    typeof o.title === 'string' && o.title.trim() !== '' &&
+    typeof o.description === 'string' && o.description.trim() !== ''
+  );
+}
+
 // ==================== BOTÓN EXPORTAR OFERTAS JSON ====================
 async function exportOffersToJSON() {
   try {
@@ -338,6 +362,11 @@ async function exportOffersToJSON() {
     const normalizedOffers = rawOffers.map(normalizeOffer);
 
     const data = { offers: normalizedOffers };
+
+    if (!validateExportedOffersData(data)) {
+      alert("❌ No se generó el archivo: se detectaron registros incompletos o inválidos en las ofertas locales (falta id, título o descripción). Corrige esas ofertas antes de exportar.");
+      return;
+    }
 
     const jsonString = JSON.stringify(data, null, 2);
     const blob = new Blob([jsonString], { type: 'application/json' });

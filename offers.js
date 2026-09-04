@@ -45,7 +45,10 @@ async function init() {
 
   let offers = [];
   try {
-    const response = await fetch(OFFERS_DATA_URL);
+    // cache: 'no-store' evita que la caché HTTP nativa del navegador
+    // devuelva una copia antigua sin pasar por la red, complementando el
+    // Network First del Service Worker.
+    const response = await fetch(OFFERS_DATA_URL, { cache: 'no-store' });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
 
@@ -53,17 +56,39 @@ async function init() {
       throw new Error("offers-data.json inválido: se esperaba { offers: [] }");
     }
 
-    offers = data.offers.filter(isValidPublicOffer);
+    offers = dedupeById(data.offers.filter(isValidPublicOffer));
   } catch (error) {
     console.error("No se pudieron cargar las ofertas:", error);
     renderError(container);
     return;
   }
 
-  // Ordenar: más reciente primero
-  offers.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0));
+  // Ordenar: más reciente primero; si dos ofertas comparten publishedAt,
+  // se usa el id como criterio secundario determinista.
+  offers.sort((a, b) => {
+    const dateDiff = new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0);
+    if (dateDiff !== 0) return dateDiff;
+    return String(a.id).localeCompare(String(b.id));
+  });
 
   renderOffers(container, offers);
+}
+
+// Detecta y descarta ofertas con id duplicado, conservando la primera
+// aparición. Registra un aviso controlado sin romper la página ni
+// inventar un id nuevo.
+function dedupeById(offers) {
+  const seen = new Set();
+  const result = [];
+  for (const o of offers) {
+    if (seen.has(o.id)) {
+      console.warn(`offers-data.json: id duplicado ignorado "${o.id}"`);
+      continue;
+    }
+    seen.add(o.id);
+    result.push(o);
+  }
+  return result;
 }
 
 function escapeHtml(value) {
