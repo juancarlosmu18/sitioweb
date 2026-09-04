@@ -217,17 +217,44 @@ async function exportProductsToJSON() {
 }
 
 // ==================== OFERTAS ====================
+// El campo image es una RUTA/URL de imagen, nunca una subida de archivo ni
+// contenido ejecutable. Acepta rutas relativas (jpg, jpeg, png, webp, gif)
+// o URLs absolutas https con esa misma extensión.
+function isValidOfferImage(value) {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return true; // vacío es válido: la web pública usa placeholder.jpg
+
+  // Bloquear esquemas peligrosos y marcado HTML embebido.
+  if (/^(javascript|data|vbscript|file):/i.test(trimmed)) return false;
+  if (/[<>"']/.test(trimmed)) return false;
+  if (trimmed.startsWith("//")) return false;
+
+  const hasAllowedExtension = /\.(jpe?g|png|webp|gif)(\?[^\s]*)?(#[^\s]*)?$/i.test(trimmed);
+
+  if (/^https:\/\//i.test(trimmed)) {
+    return hasAllowedExtension;
+  }
+
+  // Cualquier otro esquema absoluto (http:, ftp:, etc.) no está permitido.
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) return false;
+
+  // Ruta relativa: debe terminar en una extensión de imagen permitida.
+  return hasAllowedExtension;
+}
+
 // Normaliza una oferta almacenada localmente al modelo público:
 // { id, title, description, image, publishedAt }
 // Migra registros antiguos (date -> publishedAt, note -> description como respaldo)
 // sin eliminar los datos originales de IndexedDB.
+// No inventa publishedAt: si no existe fecha conocida, se exporta como null.
 function normalizeOffer(o) {
+  const rawImage = String(o.image || "").trim();
   return {
     id: o.id,
     title: o.title || "",
     description: o.description || o.note || "",
-    image: o.image || "",
-    publishedAt: o.publishedAt || o.date || new Date().toISOString()
+    image: isValidOfferImage(rawImage) ? rawImage : "",
+    publishedAt: o.publishedAt || o.date || null
   };
 }
 
@@ -283,6 +310,11 @@ async function handleSaveOffer() {
   const image = imageInput ? imageInput.value.trim() : "";
 
   if (!title) return alert("El título es obligatorio");
+
+  if (image && !isValidOfferImage(image)) {
+    alert("❌ La imagen debe ser una ruta relativa (jpg, jpeg, png, webp o gif) o una URL https con esa extensión.");
+    return;
+  }
 
   const offerData = {
     id: idx === "new" ? `off-${Date.now()}` : offers[idx].id,
