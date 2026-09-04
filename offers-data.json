@@ -1,0 +1,32 @@
+{
+  "offers": [
+    {
+      "id": "off-1788483786778",
+      "title": "descuento en tu cumpleaños",
+      "description": "el dia de tu cumpleaños obtienes el 10% de descuento",
+      "image": "promo-cumpleanos.jpg",
+      "publishedAt": "2026-09-04T01:03:06.778Z"
+    },
+    {
+      "id": "off-1788484331283",
+      "title": "Prueba final del sistema de ofertas.",
+      "description": "Prueba temporal del sistema de ofertas.",
+      "image": "postres-2.jpg",
+      "publishedAt": "2026-09-04T01:42:18.513Z"
+    },
+    {
+      "id": "off-1788486458866",
+      "title": "dia de madres",
+      "description": "por la compra de tortas mitivo dia de madres obten un 15% de descuento",
+      "image": "KPOPH.jpg",
+      "publishedAt": "2026-09-04T01:47:38.866Z"
+    },
+    {
+      "id": "off-1788488065764",
+      "title": "Prueba publicación definitiva",
+      "description": "Esta oferta debe quedar publicada desde GitHub.",
+      "image": "postres-2.jpg",
+      "publishedAt": "2026-09-04T02:14:25.764Z"
+    }
+  ]
+}
