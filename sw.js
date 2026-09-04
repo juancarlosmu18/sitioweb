@@ -49,9 +49,33 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch: estrategia Cache First, luego Network
+// Fetch: Network First para offers-data.json (fuente pública de ofertas),
+// Cache First para el resto de recursos de la PWA.
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+
+  const url = new URL(event.request.url);
+  const isOffersData = url.pathname.endsWith('/offers-data.json');
+
+  if (isOffersData) {
+    // Network First: intenta obtener la versión más reciente. Si hay red,
+    // actualiza la caché con la respuesta fresca. Si no hay red, cae de
+    // vuelta a la copia cacheada (si existe) para soporte offline.
+    event.respondWith(
+      fetch(event.request).then(networkResponse => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+        }
+        return networkResponse;
+      }).catch(() => {
+        return caches.match(event.request).then(cachedResponse => {
+          return cachedResponse || Response.error();
+        });
+      })
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {

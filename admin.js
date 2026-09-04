@@ -310,6 +310,7 @@ async function handleSaveOffer() {
   const image = imageInput ? imageInput.value.trim() : "";
 
   if (!title) return alert("El título es obligatorio");
+  if (!description) return alert("La descripción es obligatoria");
 
   if (image && !isValidOfferImage(image)) {
     alert("❌ La imagen debe ser una ruta relativa (jpg, jpeg, png, webp o gif) o una URL https con esa extensión.");
@@ -325,7 +326,7 @@ async function handleSaveOffer() {
   };
 
   await saveOffer(offerData);
-  alert("✅ Oferta guardada");
+  alert("✅ Oferta guardada localmente.\n\nEsto NO la publica en la web. Usa \"Exportar ofertas a JSON\" y sube el archivo offers-data.json a GitHub para publicarla.");
   hideAdminPanel();
   setTimeout(() => location.reload(), 700);
 }
@@ -349,7 +350,7 @@ async function exportOffersToJSON() {
     link.click();
     document.body.removeChild(link);
 
-    alert(`✅ Archivo offers-data.json descargado correctamente.\n\nAhora súbelo a la raíz de tu repositorio en GitHub.`);
+    alert(`✅ offers-data.json generado correctamente.\n\nAhora debes subirlo a GitHub para publicar los cambios. Mientras no lo subas, la web pública seguirá mostrando la versión anterior.`);
   } catch (e) {
     alert("Error al exportar ofertas: " + e.message);
   }
@@ -358,10 +359,10 @@ async function exportOffersToJSON() {
 async function handleDeleteOffer() {
   const idx = document.getElementById("admin-offer-select").value;
   if (idx === "new") return;
-  if (!confirm("¿Eliminar esta oferta?")) return;
+  if (!confirm("¿Eliminar esta oferta localmente?")) return;
 
   await deleteOffer(offers[idx].id);
-  alert("Oferta eliminada");
+  alert("🗑️ Oferta eliminada localmente (IndexedDB).\n\nEsto NO la elimina de la web pública. Para que el cambio se refleje en línea, exporta offers-data.json de nuevo y súbelo a GitHub.");
   hideAdminPanel();
   setTimeout(() => location.reload(), 700);
 }

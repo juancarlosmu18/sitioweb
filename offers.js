@@ -92,7 +92,7 @@ function renderOffers(container, offers) {
 
     const html = `
       <div class="offer-card">
-        <img src="${image}" class="offer-img" alt="${title}"/>
+        <img src="${image}" class="offer-img" alt="${title}" data-fallback-applied="false" onerror="if(this.dataset.fallbackApplied==='true'){this.onerror=null;return;} this.dataset.fallbackApplied='true'; this.src='placeholder.jpg';"/>
 
         <div class="offer-body">
           <h3>${title}</h3>
