@@ -249,7 +249,7 @@
       "productType": "standard",
       "pricing": {
         "type": "fixed",
-        "amount": 30000,
+        "amount": 35000,
         "currency": "COP"
       }
     },
