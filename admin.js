@@ -130,6 +130,16 @@ function fillAdminFields(idx) {
   updateAdminImagePreview(p ? p.image : "");
 }
 
+// Descripción corta para las tarjetas: recorta en límite de palabra y no deja
+// una sílaba partida (antes se usaba desc.slice(0, 80)).
+function buildShortDescription(text, max = 80) {
+  const clean = String(text || "").replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${(lastSpace > 40 ? cut.slice(0, lastSpace) : cut).trim()}…`;
+}
+
 async function saveAdminProduct() {
   const idx = document.getElementById("admin-product-select").value;
   const category = document.getElementById("admin-category").value.trim();
@@ -168,7 +178,7 @@ async function saveAdminProduct() {
     productName: existingProduct.productName || name,
     size: existingProduct.size || null,
     productType,
-    shortDescription: desc.slice(0, 80),
+    shortDescription: buildShortDescription(desc),
     description: desc,
     price: price,
     priceFrom: price,
