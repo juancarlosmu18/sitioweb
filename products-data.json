@@ -16,6 +16,10 @@
     {
       "id": "encargos-especiales-nina",
       "name": "Encargos especiales para niña"
+    },
+    {
+      "id": "accesorios-y-pinateria",
+      "name": "Accesorios y piñatería"
     }
   ],
   "products": [
