@@ -9,7 +9,14 @@ export function getPricing(product) {
 }
 
 export function formatPrice(pricing) {
-  const labels = { from: 'Desde ', variable: 'Precio variable', quote: 'Cotizar' };
+  // Etiqueta visible según el tipo de precio. «custom» y «from» no son precios
+  // cerrados: los encargos se cotizan según diseño y complejidad.
+  const labels = {
+    from: 'Desde ',
+    variable: 'Precio variable: ',
+    quote: 'Cotizar ',
+    custom: 'Referencia: '
+  };
   const amount = Number(pricing.amount);
   const formattedAmount = Number.isFinite(amount) && amount > 0
     ? `$${amount.toLocaleString('es-CO')}`
