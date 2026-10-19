@@ -146,7 +146,17 @@ Contempla diferentes situaciones:
 
 La función de formato convierte estos modelos en una representación comprensible para el usuario.
 
+Cada modelo tiene una etiqueta visible:
+
+- Precio fijo: importe sin prefijo.
+- Precio desde: «Desde ».
+- Precio variable: «Precio variable: ».
+- Precio a cotizar: «Cotizar».
+- Precio personalizado: «Referencia: ».
+
 Esto permite evitar que cada página implemente por separado la lógica de precios.
+
+El tipo de precio de cada producto puede elegirse desde el panel administrativo (ver sección 18).
 
 ---
 
@@ -326,6 +336,7 @@ Permite trabajar con:
 - Productos.
 - Categorías.
 - Ofertas.
+- Tipo de precio de cada producto (fijo, desde, variable, cotizar, referencia).
 
 La administración ocurre en el navegador mediante almacenamiento local.
 
@@ -420,6 +431,14 @@ Por ejemplo, el sistema de ofertas muestra mensajes específicos cuando:
 - No existen ofertas.
 - No puede cargarse el archivo de ofertas.
 - Los datos no tienen la estructura esperada.
+
+El catálogo de productos distingue tres estados:
+
+- Catálogo cargado con productos: se renderizan las categorías y tarjetas.
+- Catálogo cargado sin productos: mensaje de catálogo vacío.
+- Catálogo que no puede cargarse: mensaje de error con salida por WhatsApp.
+
+El sitio incluye además una página "404.html" propia para las URLs inexistentes, con la identidad visual del sitio, "robots: noindex" y dos salidas (catálogo y WhatsApp). Esa página usa rutas absolutas para recursos y navegación, porque GitHub Pages la sirve en la ruta solicitada, a cualquier profundidad.
 
 ---
 

@@ -359,6 +359,19 @@ Checklist de `GUIA_DESARROLLO.MD` §19–§22:
 | 4 | ¿Eliminar «Se abre en una nueva pestaña.»? | T2 | Sí |
 | 5 | ¿Publicar `accesorios.*` en algún momento? | — | Fuera de este sprint |
 
+### Decisiones confirmadas (18 de octubre de 2026)
+
+| # | Decisión tomada | Efecto en la ejecución |
+|---|---|---|
+| 1 | **Opción A**: etiqueta `custom: 'Referencia: '` **y**, además, selector de tipo de precio en el panel administrativo (ampliación de alcance autorizada por el negocio). | T3 se ejecutó en dos commits: la etiqueta (`fix`) y el selector del panel (`feat`). No se modificó ningún importe: «Desde $98.000» se descartó porque Paw Patrol cuesta 105.000. |
+| 2 | **Eliminar** la frase de la línea 103. | La tarjeta de Ubicación queda con «Zona» y «Horarios», que ya son datos reales. No se inventó texto. |
+| 3 | **El logo grande es intencional**: no se toca el tamaño (192 px / 152 px). | T6 quedó limitada al tinte del header. La optimización de `logo.jpg` (159 KB) es Sprint 3. |
+| 4 | **Eliminar** «Se abre en una nueva pestaña.» | T2. Los enlaces conservan `target="_blank"` y `rel="noreferrer"`. |
+| 5 | **No publicar** `accesorios.*` en este sprint: la categoría «Accesorios» se administra desde el panel como cualquier otra, con el mismo `products-data.json`. | Sin cambios de código ni de datos. La rama `chore/recuperar-accesorios` (0391551) queda intacta. |
+| 6 | **Una sola rama** para el sprint: `fix/sprint-1-visibles`. | Un commit por tarea; T4 en dos commits (código y datos), como pide el §5. |
+
+**No verificado en el entorno de ejecución:** el render en navegador (el navegador headless está bloqueado por el sandbox del entorno) y el comportamiento del Service Worker con caché previa. La verificación de esas dos cosas debe hacerse en el navegador o tras el despliegue.
+
 ---
 
 ## 8. Criterios de terminado
