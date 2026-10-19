@@ -548,6 +548,9 @@ button:focus-visible {
 .contact-grid {
   display: grid;
   gap: 14px;
+  /* Sin esto, las tarjetas cortas (WhatsApp, Redes) se estiran hasta la altura
+     de Ubicación y quedan con un hueco blanco grande debajo del contenido. */
+  align-items: start;
 }
 
 .social-links {
