@@ -188,6 +188,14 @@
     <input id="admin-name" placeholder="Nombre del producto" style="width:100%; margin-bottom:10px; padding:10px;" />
     <textarea id="admin-desc" placeholder="Descripción completa" style="width:100%; height:80px; margin-bottom:10px; padding:10px;"></textarea>
     <input id="admin-price" placeholder="Precio base (COP)" type="number" style="width:100%; margin-bottom:10px; padding:10px;" />
+    <label for="admin-price-type" style="display:block; font-size:13px; color:#888; margin-bottom:4px;">Tipo de precio</label>
+    <select id="admin-price-type" style="width:100%; margin-bottom:10px; padding:10px;">
+      <option value="fixed">Precio fijo</option>
+      <option value="from">Desde (precio mínimo)</option>
+      <option value="variable">Precio variable</option>
+      <option value="quote">Cotizar</option>
+      <option value="custom">Referencia (personalizado)</option>
+    </select>
     <input id="admin-image" placeholder="URL de imagen (opcional)" style="width:100%; margin-bottom:10px; padding:10px;" />
     
     <input id="admin-image-file" type="file" accept="image/*" style="width:100%; margin-bottom:12px;" />

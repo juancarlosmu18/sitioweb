@@ -8,6 +8,16 @@ async function init() {
   const catalog = await loadProductsFromJSON();
   const products = catalog?.products || [];
 
+  if (!catalog) {
+    renderError(document.getElementById("dynamic-categories"));
+    return;
+  }
+
+  if (!products.length) {
+    renderEmpty(document.getElementById("dynamic-categories"));
+    return;
+  }
+
   console.log(`Total productos: ${products.length}`);
   renderOptimized(products, catalog?.categories || []);
 }
@@ -22,6 +32,18 @@ async function loadProductsFromJSON() {
   } catch (e) {
     return null;
   }
+}
+
+// Estado de error: el catálogo no se pudo cargar
+function renderError(container) {
+  if (!container) return;
+  container.innerHTML = '<div class="container"><p class="muted">No fue posible cargar el catálogo en este momento. Escribinos por WhatsApp y te pasamos los precios.</p></div>';
+}
+
+// Estado vacío: el catálogo cargó pero no tiene productos
+function renderEmpty(container) {
+  if (!container) return;
+  container.innerHTML = '<div class="container"><p class="muted">Por ahora no hay productos publicados.</p></div>';
 }
 
 function renderOptimized(products, categories) {

@@ -124,8 +124,16 @@ function initMobileNav() {
 }
 
 
+// Rellena el año actual en el pie de página ([data-year])
+function initYear() {
+  const targets = document.querySelectorAll("[data-year]");
+  if (!targets.length) return;
+  const year = new Date().getFullYear();
+  targets.forEach((el) => { el.textContent = year; });
+}
+
 function main() {
-  //initYear();
+  initYear();
   initMobileNav();
   initWhatsAppLinks();
  // initVisitCounter();
