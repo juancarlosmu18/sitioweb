@@ -3,7 +3,7 @@
 import { getAllProducts, addOrUpdateProduct, deleteProduct } from './db.js';
 import { getAllCategories, getCategoryNames, addCategory } from './categories-db.js';
 import { getAllOffers, saveOffer, deleteOffer } from './offers-db.js';
-import { mergeProducts } from './catalog-utils.js';
+import { mergeProducts, getPricing } from './catalog-utils.js';
 
 let products = [];
 let categories = [];
@@ -46,6 +46,24 @@ function renderCategoryOptions() {
     opt.textContent = name;
     select.appendChild(opt);
   });
+}
+
+// ==================== TIPO DE PRECIO ====================
+// Tipos que entiende catalog-utils.formatPrice().
+const PRICE_TYPES = ["fixed", "from", "variable", "quote", "custom"];
+
+// Tipo sugerido al crear un producto: los encargos especiales son
+// personalizados (precio de referencia); el resto arranca como precio fijo.
+function defaultPriceType(category) {
+  return String(category || "").startsWith("Encargos especiales") ? "custom" : "fixed";
+}
+
+// Decide el tipo que se guarda: manda el selector del panel; si no hay valor
+// válido se conserva el del producto existente o el que corresponde a la
+// categoría. Así no se puede guardar un tipo que el catálogo no sabe mostrar.
+function resolvePriceType(selected, existingPricing, category) {
+  const fallback = existingPricing?.type || defaultPriceType(category);
+  return PRICE_TYPES.includes(selected) ? selected : fallback;
 }
 
 // ==================== PRODUCTOS ====================
@@ -102,6 +120,13 @@ function fillAdminFields(idx) {
   const catSelect = document.getElementById("admin-category");
   if (catSelect && p?.category) catSelect.value = p.category;
 
+  const typeSelect = document.getElementById("admin-price-type");
+  if (typeSelect) {
+    typeSelect.value = p
+      ? getPricing(p).type
+      : defaultPriceType(catSelect ? catSelect.value : "");
+  }
+
   updateAdminImagePreview(p ? p.image : "");
 }
 
@@ -129,6 +154,12 @@ async function saveAdminProduct() {
   const productType = isCustomCategory
     ? 'custom'
     : (existingProduct.productType || 'standard');
+  const priceTypeSelect = document.getElementById("admin-price-type");
+  const priceType = resolvePriceType(
+    priceTypeSelect ? priceTypeSelect.value : "",
+    existingProduct.pricing,
+    category
+  );
   const productData = {
     ...existingProduct,
     id: idx === "new" ? `prod-${Date.now()}` : products[idx].id,
@@ -143,9 +174,7 @@ async function saveAdminProduct() {
     priceFrom: price,
     pricing: {
       ...(existingProduct.pricing || {}),
-      type: productType === 'custom'
-        ? 'custom'
-        : (existingProduct.pricing?.type || 'fixed'),
+      type: priceType,
       amount: price,
       currency: 'COP'
     },
@@ -425,6 +454,18 @@ document.addEventListener("DOMContentLoaded", () => {
           await refreshCategories();
           input.value = '';
         }
+      });
+    }
+
+    // Al crear un producto nuevo, el tipo de precio acompaña a la categoría
+    // elegida: «Encargos especiales…» → custom (referencia), resto → fijo.
+    const catSelect = document.getElementById("admin-category");
+    const productSelect = document.getElementById("admin-product-select");
+    if (catSelect && productSelect) {
+      catSelect.addEventListener("change", () => {
+        if (productSelect.value !== "new") return;
+        const typeSelect = document.getElementById("admin-price-type");
+        if (typeSelect) typeSelect.value = defaultPriceType(catSelect.value);
       });
     }
 
