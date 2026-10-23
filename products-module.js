@@ -77,9 +77,9 @@ function renderOptimized(products, categories) {
     section.style.cssText = 'padding: 40px 0; border-bottom: 1px solid #eee;';
 
     section.innerHTML = `
-      <div style="max-width:1120px; margin:0 auto; padding:0 20px;">
+      <div style="max-width:var(--container); margin:0 auto; padding:0 20px;">
         <h2 style="font-family:'Playfair Display',serif; font-size:32px; margin-bottom:24px; color:#2b1d16;">${cat}</h2>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;" id="grid-${cat.replace(/\s+/g, '-')}"></div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap:24px;" id="grid-${cat.replace(/\s+/g, '-')}"></div>
       </div>
     `;
 
@@ -103,10 +103,10 @@ function renderOptimized(products, categories) {
       card.innerHTML = `
         <a href="product.html?id=${prod.id}" style="text-decoration:none; color:inherit;">
           <img src="${prod.image || 'placeholder.jpg'}" 
-               style="width:100%; height:220px; object-fit:cover;" 
+               style="width:100%; height:260px; object-fit:cover;" 
                alt="${prod.name}" loading="lazy">
           <div style="padding:16px;">
-            <h3 style="margin:0 0 8px 0; font-size:19px;">${prod.name}</h3>
+            <h3 style="margin:0 0 8px 0; font-size:20px;">${prod.name}</h3>
             <p style="margin:0 0 12px 0; color:#666; font-size:14px;">${prod.shortDescription || ''}</p>
             <div style="font-weight:700; color:#2b1d16;">${formatPrice(price)}</div>
           </div>
