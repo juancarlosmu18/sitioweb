@@ -207,6 +207,24 @@ El sistema:
 - Muestra un estado cuando no existen ofertas.
 - Muestra un mensaje de error cuando no puede cargar los datos.
 
+Cada promoción puede tener fecha de inicio y fecha de fin (día completo, zona
+horaria America/Bogota) y un interruptor de publicación, administrados desde el
+panel. La página pública muestra únicamente las promociones vigentes y aplica
+estas reglas:
+
+- Vigente: activa y con la fecha de hoy dentro del rango (o sin fechas).
+- Programada: la fecha de inicio es posterior a hoy; no se muestra.
+- Vencida: la fecha de fin ya pasó; no se muestra nunca.
+- Desactivada: el interruptor está apagado; no se muestra.
+
+Una promoción sin fechas no caduca (compatibilidad con las ofertas publicadas
+antes de este modelo). El orden de la página es: primero la que vence antes; las
+que no tienen fecha de fin van al final.
+
+Cada tarjeta incluye un botón «Pedir por WhatsApp» con el nombre de la promoción
+en el mensaje. Los enlaces se arman con la misma función de script.js que usa el
+resto del sitio.
+
 ---
 
 11. Validación de imágenes de ofertas

@@ -255,6 +255,14 @@ async function exportProductsToJSON() {
   }
 }
 
+// Las dos fechas de una oferta son opcionales; si vienen, el fin no puede ser
+// anterior al inicio. Son fechas ISO YYYY-MM-DD, así que se comparan como
+// cadenas: no hay riesgo de zona horaria ni de conversiones de Date.
+function fechasDeOfertaValidas(startsAt, endsAt) {
+  if (!startsAt || !endsAt) return true;
+  return endsAt >= startsAt;
+}
+
 // ==================== OFERTAS ====================
 // El campo image es una RUTA/URL de imagen, nunca una subida de archivo ni
 // contenido ejecutable. Acepta rutas relativas (jpg, jpeg, png, webp, gif)
@@ -282,10 +290,10 @@ function isValidOfferImage(value) {
 }
 
 // Normaliza una oferta almacenada localmente al modelo público:
-// { id, title, description, image, publishedAt }
-// Migra registros antiguos (date -> publishedAt, note -> description como respaldo)
-// sin eliminar los datos originales de IndexedDB.
-// No inventa publishedAt: si no existe fecha conocida, se exporta como null.
+// { id, title, description, image, publishedAt, startsAt, endsAt, active }
+// Migra registros antiguos (date -> publishedAt, note -> description como
+// respaldo, expiresAt -> endsAt) sin eliminar los datos originales de IndexedDB.
+// No inventa fechas: si no existen, se exportan vacías y la oferta no caduca.
 function normalizeOffer(o) {
   const rawImage = String(o.image || "").trim();
   return {
@@ -293,7 +301,10 @@ function normalizeOffer(o) {
     title: o.title || "",
     description: o.description || o.note || "",
     image: isValidOfferImage(rawImage) ? rawImage : "",
-    publishedAt: o.publishedAt || o.date || null
+    publishedAt: o.publishedAt || o.date || null,
+    startsAt: o.startsAt || "",
+    endsAt: o.endsAt || o.expiresAt || "",
+    active: o.active !== false
   };
 }
 
@@ -325,11 +336,17 @@ function fillOfferFields(idx) {
   if (deleteBtn) deleteBtn.style.display = (idx === "new") ? "none" : "block";
 
   const imageInput = document.getElementById("admin-offer-image");
+  const startInput = document.getElementById("admin-offer-start");
+  const endInput = document.getElementById("admin-offer-end");
+  const activeInput = document.getElementById("admin-offer-active");
 
   if (idx === "new") {
     document.getElementById("admin-offer-title").value = "";
     document.getElementById("admin-offer-desc").value = "";
     if (imageInput) imageInput.value = "";
+    if (startInput) startInput.value = "";
+    if (endInput) endInput.value = "";
+    if (activeInput) activeInput.checked = true;
     return;
   }
 
@@ -338,6 +355,9 @@ function fillOfferFields(idx) {
     document.getElementById("admin-offer-title").value = o.title || "";
     document.getElementById("admin-offer-desc").value = o.description || "";
     if (imageInput) imageInput.value = o.image || "";
+    if (startInput) startInput.value = o.startsAt || "";
+    if (endInput) endInput.value = o.endsAt || "";
+    if (activeInput) activeInput.checked = o.active !== false;
   }
 }
 
@@ -356,12 +376,28 @@ async function handleSaveOffer() {
     return;
   }
 
+  const startInput = document.getElementById("admin-offer-start");
+  const endInput = document.getElementById("admin-offer-end");
+  const activeInput = document.getElementById("admin-offer-active");
+  const startsAt = startInput ? startInput.value : "";
+  const endsAt = endInput ? endInput.value : "";
+  const active = activeInput ? activeInput.checked : true;
+
+  // Las fechas son opcionales (una oferta sin fechas no caduca).
+  if (!fechasDeOfertaValidas(startsAt, endsAt)) {
+    alert("La fecha de fin no puede ser anterior a la fecha de inicio.");
+    return;
+  }
+
   const offerData = {
     id: idx === "new" ? `off-${Date.now()}` : offers[idx].id,
     title,
     description,
     image,
-    publishedAt: new Date().toISOString()
+    publishedAt: new Date().toISOString(),
+    startsAt,
+    endsAt,
+    active
   };
 
   await saveOffer(offerData);

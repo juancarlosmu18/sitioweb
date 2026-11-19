@@ -857,9 +857,15 @@ button:focus-visible {
 }
 
 .offer-date {
+  margin: 8px 0 0;
   font-size: 12px;
   color: #888;
 }
+
+.offer-cta {
+  margin-top: 12px;
+}
+
 .offers-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
